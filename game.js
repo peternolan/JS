@@ -24,7 +24,7 @@ Called once after engine is initialized but before event-polling begins.
 // Uncomment the following BLOCK to expose PS.init() event handler:
 
 
-var G = (function() {
+let G = (function() {
 
     var board1 = [
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -36,7 +36,7 @@ var G = (function() {
         1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
         1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
         1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,
         1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
         1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
         1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
@@ -47,23 +47,22 @@ var G = (function() {
     ];
 
 
+    let WIDTH = 17; // width of grid
+    let HEIGHT = 17; // height of grid
 
-    var WIDTH = 17; // width of grid
-    var HEIGHT = 17; // height of grid
+    let xglobe = 0;
+    let yglobe = 0;
 
-    var xglobe = 0;
-    var yglobe = 0;
+    let musicTrack = 0;
 
-    var musicTrack = 0;
+    let COLOR_FLOOR = PS.COLOR_WHITE; // floor color
+    let COLOR_WALL = PS.COLOR_BLACK; // wall color
+    let COLOR_DEF = PS.COLOR_GRAY; // def color
+    let timer = null; // timer id, null if none
+    let countx = 0; // countdown value
+    let county = 0;
 
-    var COLOR_FLOOR = PS.COLOR_WHITE; // floor color
-    var COLOR_WALL = PS.COLOR_BLACK; // wall color
-    var COLOR_DEF = PS.COLOR_GRAY; // def color
-    var timer = null; // timer id, null if none
-    var countx = 0; // countdown value
-    var county = 0;
-
-    var musicOST = ["xylo_c5",  "xylo_db5", "xylo_d5", "xylo_eb5",
+    let musicOST = ["xylo_c5",  "xylo_db5", "xylo_d5", "xylo_eb5",
         "xylo_f5", "xylo_gb5", "xylo_g5", "xylo_ab5", "xylo_a5",
         "xylo_bb5", "xylo_b5", "xylo_c6", "xylo_db6", "xylo_d6", "xylo_eb6"]
 
@@ -338,7 +337,7 @@ It doesn't have to do anything.
 */
 
 // Uncomment the following BLOCK to expose PS.touch() event handler:
-S.touch = function( x, y, data, options ) {
+PS.touch = function( x, y, data, options ) {
     var r, g, b, i, j;
     // Uncomment the following code line to inspect x/y parameters:
 
