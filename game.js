@@ -46,6 +46,7 @@ var G = (function() {
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
     ];
 
+    var energyLife = 3;
 
     var WIDTH = 17; // width of grid
     var HEIGHT = 17; // height of grid
@@ -292,12 +293,30 @@ var G = (function() {
 
         },
 
+
+        energyLifeManip : function () {
+            if (energyLife > 0) {
+                energyLife--;
+                return true;
+            }
+            else return false;
+
+        },
+
+        energyLifePrint : function () {
+            return energyLife;
+
+        },
+
+
         // G.init()
         // Initializes the game
 
         init : function () {
             PS.gridSize( WIDTH, HEIGHT ); // init grid
             PS.border( PS.ALL, PS.ALL, 0 ); // no borders
+
+            energyLife = 3;
 
             for ( var x = 0; x < 17; x += 1 ) {
                 for ( var y = 0; y < 17; y += 1 ) {
@@ -336,6 +355,7 @@ var G = (function() {
             PS.audioLoad( "xylo_db6" );//14
             PS.audioLoad( "xylo_d6" );//15
             PS.audioLoad( "xylo_eb6" );//16
+            PS.audioLoad( "fx_squawk");//Duck Squak on failure
 
 
         }
@@ -370,12 +390,20 @@ PS.touch = function( x, y, data, options ) {
     var r, g, b;
     // Uncomment the following code line to inspect x/y parameters:
 
-    // Add code here for mouse clicks/touches over a bead.
-    r = PS.random(256) - 1; // random red 0-255
-    g = PS.random(256) - 1; // random green
-    b = PS.random(256) - 1; // random blue
-
-    G.start( x, y, r, g, b);
+    if (G.energyLifeManip()) {
+        PS.statusColor(PS.COLOR_BLUE);
+        PS.statusText("Energy is : " + G.energyLifePrint());
+        // Add code here for mouse clicks/touches over a bead.
+        r = PS.random(256) - 1; // random red 0-255
+        g = PS.random(256) - 1; // random green
+        b= PS.random(256) - 1; // random blue
+        G.start( x, y, r, g, b);
+    }
+    else {
+        PS.statusColor(PS.COLOR_RED);
+        PS.statusText("OUT OF ENERGY");
+        PS.audioPlay("fx_squawk");
+    }
 
 };
 
