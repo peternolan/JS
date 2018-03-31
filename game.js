@@ -24,19 +24,19 @@ Called once after engine is initialized but before event-polling begins.
 // Uncomment the following BLOCK to expose PS.init() event handler:
 
 
-let G = (function() {
+var G = (function() {
 
     var board1 = [
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+        1,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,1,
+        1,2,0,2,0,2,0,2,0,2,0,2,0,2,0,2,1,
+        1,0,2,0,2,0,2,0,2,0,2,0,2,0,2,0,1,
         1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
         1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
         1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
         1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
         1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
         1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-        1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,
         1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
         1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
         1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
@@ -47,24 +47,27 @@ let G = (function() {
     ];
 
 
-    let WIDTH = 17; // width of grid
-    let HEIGHT = 17; // height of grid
+    var WIDTH = 17; // width of grid
+    var HEIGHT = 17; // height of grid
 
-    let xglobe = 0;
-    let yglobe = 0;
 
-    let musicTrack = 0;
+    var musicTrack = 0;
 
-    let COLOR_FLOOR = PS.COLOR_WHITE; // floor color
-    let COLOR_WALL = PS.COLOR_BLACK; // wall color
-    let COLOR_DEF = PS.COLOR_GRAY; // def color
-    let timer = null; // timer id, null if none
-    let countx = 0; // countdown value
-    let county = 0;
+    var xglobe = 0;
+    var yglobe = 0;
 
-    let musicOST = ["xylo_c5",  "xylo_db5", "xylo_d5", "xylo_eb5",
+    var COLOR_FLOOR = PS.COLOR_WHITE; // floor color
+    var COLOR_WALL = PS.COLOR_BLACK; // wall color
+    var COLOR_DEF = PS.COLOR_GRAY; // def color
+    var COLOR_AREA = PS.COLOR_GREEN; // def color
+    var COLOR_GOAL = PS.COLOR_YELLOW; // def color
+
+    var timer = null; // timer id, null if none
+
+    var musicOST = ["xylo_c5",  "xylo_db5", "xylo_d5", "xylo_eb5",
         "xylo_f5", "xylo_gb5", "xylo_g5", "xylo_ab5", "xylo_a5",
-        "xylo_bb5", "xylo_b5", "xylo_c6", "xylo_db6", "xylo_d6", "xylo_eb6"]
+        "xylo_bb5", "xylo_b5", "xylo_c6", "xylo_db6", "xylo_d6",
+        "xylo_eb6"];
 
 
     // The following variables are grab-related,
@@ -78,33 +81,56 @@ let G = (function() {
 
     var exports = {
 
-        endMove : function ( x, y, h, v) {
+
+        endMove : function (x, y, h, v) {
+
+
+            PS.debug("x, y b4 " + x + " " + y + "\n");
+            PS.debug("h, v" + h + " " + v + "\n");
 
             xglobe += h; // update grabber's x-pos
             yglobe += v; // update grabber's y-pos
 
-            countx -= 1;
-            county -= 1;
+            PS.debug("x, y after " + x + " " + y + "\n");
 
+            PS.debug( "PS.Color " + PS.color(x, y) + "\n")
+            PS.debug( "Wall " + COLOR_WALL + "\n")
+            PS.debug( "Def " + COLOR_DEF + "\n")
+            PS.debug( "Floor" + COLOR_FLOOR + "\n")
 
-            if((xglobe < 0) || (xglobe >= 16) || (yglobe < 0) || (yglobe >= 16)) {
+            if (PS.color(xglobe, yglobe) === COLOR_WALL) {
+                PS.timerStop(timer);
+                timer = null;
+            }
+            else if (PS.color(xglobe, yglobe) === COLOR_DEF) {
+                PS.audioPlay(musicOST[musicTrack]);
+                musicTrack++;
+                PS.color(xglobe, yglobe, COLOR_FLOOR);
+                PS.timerStop(timer);
+                timer = null;
+            }
+            else if (PS.color(xglobe, yglobe) === COLOR_GOAL) {
+                PS.audioPlay(musicOST[musicTrack]);
+                musicTrack++;
+                PS.color(xglobe, yglobe, COLOR_FLOOR);
                 PS.timerStop(timer);
                 timer = null;
             }
             else {
-                if (PS.color(xglobe, yglobe) === COLOR_WALL) {
-                    return;
-                }
-
+                PS.debug( "In ELSE \n")
                 PS.audioPlay(musicOST[musicTrack]);
-                musicTrack--;
-                PS.fade(xglobe, yglobe, 30);
-                PS.color(xglobe, yglobe, PS.COLOR_WHITE);
+                musicTrack++;
+                PS.color(xglobe, yglobe, COLOR_FLOOR);
             }
+
+
         },
 
 
         end : function ( x, y, rand) {
+
+
+            PS.debug("END");
 
             xglobe = x;
             yglobe = y;
@@ -112,49 +138,48 @@ let G = (function() {
 
             PS.audioPlay(musicOST[musicTrack]);
             musicTrack--;
-            PS.fade( xglobe, yglobe, 60 );
-            PS.color( xglobe, yglobe, PS.COLOR_WHITE); // set bead color
+            PS.color( xglobe, yglobe, COLOR_FLOOR); // set bead color
 
             if (!timer) {
                 switch (rand) {
                     case 0:
                         //North
-                        timer = PS.timerStart(60, G.endMove, x, y, 0, 1);
+                        timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 0, 1);
                         break;
 
                     case 1:
                         //East
-                        timer = PS.timerStart(60, G.endMove, x, y, 1, 0);
+                        timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 1, 0);
                         break;
 
                     case 2:
                         //NorthEast
-                        timer = PS.timerStart(60, G.endMove, x, y, 1, 1);
+                        timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 1, 1);
                         break;
 
                     case 3:
                         //NorthWest
-                        timer = PS.timerStart(60, G.endMove, x, y, -1, 1);
+                        timer = PS.timerStart(60, G.endMove, xglobe, yglobe, -1, 1);
                         break;
 
                     case 4:
                         //SouthWest
-                        timer = PS.timerStart(60, G.endMove, x, y, -1, -1);
+                        timer = PS.timerStart(60, G.endMove, xglobe, yglobe, -1, -1);
                         break;
 
                     case 5:
                         //South
-                        timer = PS.timerStart(60, G.endMove, x, y, 0, -1);
+                        timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 0, -1);
                         break;
 
                     case 6:
                         //West
-                        timer = PS.timerStart(60, G.endMove, x, y, -1, 0);
+                        timer = PS.timerStart(60, G.endMove, xglobe, yglobe, -1, 0);
                         break;
 
                     case 7:
                         //SouthEast
-                        timer = PS.timerStart(60, G.endMove, x, y, 1, -1);
+                        timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 1, -1);
                         break;
 
                 }
@@ -164,29 +189,41 @@ let G = (function() {
 
         move : function ( x, y, h, v, r, g, b, rand) {
 
+            PS.debug("x, y b4 " + x + " " + y + "\n");
+            PS.debug("h, v" + h + " " + v + "\n");
+
             xglobe += h; // update grabber's x-pos
             yglobe += v; // update grabber's y-pos
 
-            countx -= 1;
-            county -= 1;
+            PS.debug("x, y after " + x + " " + y + "\n");
 
+            PS.debug( "PS.Color " + PS.color(x, y) + "\n")
+            PS.debug( "Wall " + COLOR_WALL + "\n")
+            PS.debug( "Def " + COLOR_DEF + "\n")
+            PS.debug( "Floor" + COLOR_FLOOR + "\n")
 
-            if((xglobe < 0) || (xglobe >= 16) || (yglobe < 0) || (yglobe >= 16)) {
+            if (PS.color(xglobe, yglobe) === COLOR_WALL) {
                 PS.timerStop(timer);
                 timer = null;
-
+                G.end(x, y, rand);
+            }
+            else if (PS.color(xglobe, yglobe) === COLOR_DEF) {
+                PS.timerStop(timer);
+                timer = null;
+                G.end(x, y, rand);
+            }
+            else if (PS.color(xglobe, yglobe) === COLOR_GOAL) {
+                PS.timerStop(timer);
+                timer = null;
                 G.end(x, y, rand);
             }
             else {
-                if (PS.color(xglobe, yglobe) === COLOR_WALL) {
-                    return;
-                }
-
+                PS.debug( "In ELSE \n")
                 PS.audioPlay(musicOST[musicTrack]);
                 musicTrack++;
-                PS.fade(xglobe, yglobe, 30);
                 PS.color(xglobe, yglobe, r, g, b);
             }
+
         },
 
 
@@ -194,13 +231,12 @@ let G = (function() {
         start : function (x, y, r, g, b) {
 
             if (!timer) {
-                countx = 16 - x;
-                county = Math.abs(y - 16);
+
                 xglobe = x;
                 yglobe = y;
                 musicTrack = 0;
+                musicTrack++;
 
-                PS.fade( xglobe, yglobe, 60 );
                 PS.color( xglobe, yglobe, r, g, b ); // set bead color
 
                 var rand = PS.random(7);
@@ -261,27 +297,24 @@ let G = (function() {
 
         init : function () {
             PS.gridSize( WIDTH, HEIGHT ); // init grid
-            PS.color( PS.ALL, PS.ALL, COLOR_FLOOR );
             PS.border( PS.ALL, PS.ALL, 0 ); // no borders
 
-            // Enclose edges of grid with black walls.
-            // PS.ALL lets us draw the top, bottom,
-            // left and right edges with a single
-            // PS.color() call for each edge.
-
-            //PS.color( PS.ALL, 0, COLOR_WALL );
-            //PS.color( PS.ALL, HEIGHT - 1, COLOR_WALL );
-            //PS.color( 0, PS.ALL, COLOR_WALL );
-            //PS.color( WIDTH - 1, PS.ALL, COLOR_WALL );
-
-
-            for ( var y = 0; y < 17; y += 1 ) {
-                for ( var x = 0; x < 17; x += 1 ) {
+            for ( var x = 0; x < 17; x += 1 ) {
+                for ( var y = 0; y < 17; y += 1 ) {
                     if ( board1[(y*17) + x] === 1) {
-                        PS.color( y, x, COLOR_WALL );
+                        PS.color( x, y, COLOR_WALL );
+                    }
+                    else if ( board1[(y*17) + x] === 2) {
+                        PS.color( x, y, COLOR_DEF );
+                    }
+                    else if ( board1[(y*17) + x] === 3) {
+                        PS.color( x, y, COLOR_AREA );
+                    }
+                    else if ( board1[(y*17) + x] === 4) {
+                        PS.color( x, y, COLOR_GOAL );
                     }
                     else {
-                        PS.color( y, x, COLOR_FLOOR );
+                        PS.color( x, y, COLOR_FLOOR );
                     }
                 }
             }
@@ -303,10 +336,6 @@ let G = (function() {
             PS.audioLoad( "xylo_db6" );//14
             PS.audioLoad( "xylo_d6" );//15
             PS.audioLoad( "xylo_eb6" );//16
-
-
-
-
 
 
         }
@@ -338,7 +367,7 @@ It doesn't have to do anything.
 
 // Uncomment the following BLOCK to expose PS.touch() event handler:
 PS.touch = function( x, y, data, options ) {
-    var r, g, b, i, j;
+    var r, g, b;
     // Uncomment the following code line to inspect x/y parameters:
 
     // Add code here for mouse clicks/touches over a bead.
@@ -346,13 +375,7 @@ PS.touch = function( x, y, data, options ) {
     g = PS.random(256) - 1; // random green
     b = PS.random(256) - 1; // random blue
 
-    var rand = G.start( x, y, r, g, b);
-
-
-    // Report bead color in status line
-
-
-
+    G.start( x, y, r, g, b);
 
 };
 
