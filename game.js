@@ -26,6 +26,8 @@ Called once after engine is initialized but before event-polling begins.
 
 var G = (function() {
 
+    //Board Configurations
+
     var board1 = [
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
         1,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,1,
@@ -107,26 +109,28 @@ var G = (function() {
     ];
 
 
+    //For Board Configuration Choosing
     var lastSeed;
     lastSeed = 0;
 
 
+    //Amount of Attempts Player has left.
     var energyLife = 3;
+
 
     var WIDTH = 17; // width of grid
     var HEIGHT = 17; // height of grid
 
-    var colorG = 0;
+    var colorG = 0;//Color of Vector on creation.
 
-    var musicTrack = 0;
+    var musicTrack = 0;//Current note being played on vector creation.
 
-    var xglobe = 0;
+    var xglobe = 0;//Current Position of edge of vector
     var yglobe = 0;
 
+    // Position where the cursor is lifted up from
     var xLift = 0;
     var yLift = 0;
-
-    var firstClick = true;
 
     var COLOR_FLOOR = PS.COLOR_WHITE; // floor color
     var COLOR_WALL = PS.COLOR_BLACK; // wall color
@@ -155,8 +159,10 @@ var G = (function() {
     var exports = {
 
 
-
-
+        //Function that erases vector. Is put through a timer in "end"
+        //x: original x position of starting point
+        //y: original y position of starting point
+        //h, v: horiz and verticle direction that the vector is moving in each cycle.
         endMove : function (x, y, h, v) {
 
 
@@ -202,6 +208,9 @@ var G = (function() {
         },
 
 
+        //Function that erases vector. Is put through a timer in "end"
+        //x: original x position of starting point
+        //y: original y position of starting point
         end : function (x, y) {
 
 
@@ -271,6 +280,10 @@ var G = (function() {
         },
 
 
+        //Function that erases vector. Is put through a timer in "end"
+        //x: original x position of starting point
+        //y: original y position of starting point
+        //h, v: horiz and verticle direction that the vector is moving in each cycle.
         move : function ( x, y, h, v) {
 
             PS.debug("x, y b4 " + x + " " + y + "\n");
@@ -312,6 +325,9 @@ var G = (function() {
 
 
 
+        //Function that erases vector. Is put through a timer in "end"
+        //x: original x position of starting point
+        //y: original y position of starting point
         start : function (x, y) {
 
             xLift = x;
@@ -367,6 +383,7 @@ var G = (function() {
         },
 
 
+        //Function that creates the reticle for the player to use.
         firstClickSetup : function (x, y) {
 
             xglobe = x;
@@ -384,6 +401,7 @@ var G = (function() {
 
         },
 
+        //Function that gets rid of the reticle.
         firstClickEnd : function (x, y) {
 
             PS.color( x+1, y, COLOR_FLOOR );
@@ -398,7 +416,7 @@ var G = (function() {
 
         },
 
-
+        //Reduces energy for each touch.
         energyLifeManip : function () {
             if (energyLife > 0) {
                 energyLife--;
@@ -408,12 +426,14 @@ var G = (function() {
 
         },
 
+        //Sends the energy function.
         energyLifePrint : function () {
             return energyLife;
 
         },
 
 
+        //Sets the global color variable to establish the color of the vector
         colorSet (colorVar) {
             colorG = colorVar;
 
