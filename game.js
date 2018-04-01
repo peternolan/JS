@@ -90,9 +90,9 @@ var G = (function() {
 
     var board4 = [
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-        1,3,3,3,2,2,2,0,3,3,3,3,3,3,3,3,1,
-        1,4,3,2,2,2,0,3,3,3,3,3,3,3,3,3,1,
-        1,3,2,2,2,0,3,3,3,3,3,3,3,3,3,3,1,
+        1,0,0,0,2,2,2,0,3,3,3,3,3,3,3,3,1,
+        1,4,0,2,2,2,0,3,3,3,3,3,3,3,3,3,1,
+        1,0,2,2,2,0,3,3,3,3,3,3,3,3,3,3,1,
         1,2,2,2,0,3,3,3,3,3,3,3,3,3,3,3,1,
         1,2,2,0,3,3,3,3,3,3,3,3,3,3,3,3,1,
         1,2,0,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
@@ -137,7 +137,7 @@ var G = (function() {
     var COLOR_DEF = PS.COLOR_GRAY; // def color
     var COLOR_AREA = 0x45FFA8; // Area color
     var COLOR_GOAL = PS.COLOR_YELLOW; // Goal color
-    var COLOR_RETICAL = 0xA1A7FF;//Retical color
+    var COLOR_RETICLE = 0xA1A7FF;//Retical color
 
     var timer = null; // timer id, null if none
 
@@ -182,12 +182,14 @@ var G = (function() {
             if (PS.color(xglobe, yglobe) === COLOR_WALL) {
                 PS.timerStop(timer);
                 timer = null;
+                PS.gridPlane(0);
             }
             else if (PS.color(xglobe, yglobe) === COLOR_DEF) {
                 PS.audioPlay(musicOST[musicTrack]);
                 musicTrack--;
                 PS.color(xglobe, yglobe, COLOR_FLOOR);
                 PS.timerStop(timer);
+                PS.gridPlane(0);
                 timer = null;
             }
             else if (PS.color(xglobe, yglobe) === COLOR_GOAL) {
@@ -195,13 +197,23 @@ var G = (function() {
                 musicTrack--;
                 PS.color(xglobe, yglobe, COLOR_FLOOR);
                 PS.timerStop(timer);
+                PS.gridPlane(0);
                 timer = null;
+            }
+            else if (PS.color(xglobe, yglobe) === COLOR_AREA) {
+                PS.audioPlay(musicOST[musicTrack]);
+                musicTrack--;
+                PS.color(xglobe, yglobe, COLOR_AREA);
+                PS.timerStop(timer);
+                timer = null;
+                PS.gridPlane(0);
             }
             else {
                 PS.debug( "In ELSE \n")
                 PS.audioPlay(musicOST[musicTrack]);
                 musicTrack--;
-                PS.color(xglobe, yglobe, COLOR_FLOOR);
+                PS.alpha( xglobe, yglobe, PS.ALPHA_TRANSPARENT );
+
             }
 
 
@@ -213,8 +225,9 @@ var G = (function() {
         //y: original y position of starting point
         end : function (x, y) {
 
-
             PS.debug("END\n");
+
+
 
             xglobe = x;
             yglobe = y;
@@ -228,7 +241,7 @@ var G = (function() {
 
             PS.audioPlay(musicOST[musicTrack]);
             musicTrack--;
-            PS.color( xglobe, yglobe, COLOR_FLOOR); // set bead color
+            PS.alpha( xglobe, yglobe, PS.ALPHA_TRANSPARENT );
 
             if (!timer) {
 
@@ -294,10 +307,11 @@ var G = (function() {
 
             PS.debug("x, y after " + x + " " + y + "\n");
 
-            PS.debug( "PS.Color " + PS.color(x, y) + "\n")
+            PS.debug( "PS.Color " + colorG + "\n")
             PS.debug( "Wall " + COLOR_WALL + "\n")
             PS.debug( "Def " + COLOR_DEF + "\n")
             PS.debug( "Floor" + COLOR_FLOOR + "\n")
+
 
             if (PS.color(xglobe, yglobe) === COLOR_WALL) {
                 PS.timerStop(timer);
@@ -316,9 +330,11 @@ var G = (function() {
             }
             else {
                 PS.debug( "In ELSE \n")
+
                 PS.audioPlay(musicOST[musicTrack]);
                 musicTrack++;
                 PS.color(xglobe, yglobe, colorG);
+                PS.alpha( xglobe, yglobe, PS.ALPHA_OPAQUE );
             }
 
         },
@@ -334,6 +350,7 @@ var G = (function() {
             yLift = y;
 
             G.firstClickEnd(xglobe, yglobe)
+            PS.gridPlane(1);
 
             if (!timer) {
 
@@ -389,14 +406,26 @@ var G = (function() {
             xglobe = x;
             yglobe = y;
 
-            PS.color( x+1, y, COLOR_RETICAL );
-            PS.color( x, y+1, COLOR_RETICAL );
-            PS.color( x+1, y+1, COLOR_RETICAL );
-            PS.color( x-1, y-1, COLOR_RETICAL );
-            PS.color( x-1, y, COLOR_RETICAL );
-            PS.color( x, y-1, COLOR_RETICAL );
-            PS.color( x+1, y-1, COLOR_RETICAL );
-            PS.color( x-1, y+1, COLOR_RETICAL );
+            PS.gridPlane(1);
+
+            PS.color( x+1, y, COLOR_RETICLE);
+            PS.alpha( x+1, y, PS.ALPHA_OPAQUE )
+            PS.color( x, y+1, COLOR_RETICLE );
+            PS.alpha( x, y+1, PS.ALPHA_OPAQUE )
+            PS.color( x+1, y+1, COLOR_RETICLE );
+            PS.alpha( x+1, y+1, PS.ALPHA_OPAQUE )
+            PS.color( x-1, y-1, COLOR_RETICLE );
+            PS.alpha( x-1, y-1, PS.ALPHA_OPAQUE )
+            PS.color( x-1, y, COLOR_RETICLE );
+            PS.alpha( x-1, y, PS.ALPHA_OPAQUE )
+            PS.color( x, y-1, COLOR_RETICLE );
+            PS.alpha( x, y-1, PS.ALPHA_OPAQUE )
+            PS.color( x+1, y-1, COLOR_RETICLE );
+            PS.alpha( x+1, y-1, PS.ALPHA_OPAQUE )
+            PS.color( x-1, y+1, COLOR_RETICLE );
+            PS.alpha( x-1, y+1, PS.ALPHA_OPAQUE )
+
+
 
 
         },
@@ -404,15 +433,42 @@ var G = (function() {
         //Function that gets rid of the reticle.
         firstClickEnd : function (x, y) {
 
-            PS.color( x+1, y, COLOR_FLOOR );
-            PS.color( x, y+1, COLOR_FLOOR );
-            PS.color( x+1, y+1, COLOR_FLOOR );
-            PS.color( x-1, y-1, COLOR_FLOOR );
-            PS.color( x-1, y, COLOR_FLOOR );
-            PS.color( x, y-1, COLOR_FLOOR );
-            PS.color( x+1, y-1, COLOR_FLOOR );
-            PS.color( x-1, y+1, COLOR_FLOOR );
 
+            PS.alpha( x+1, y, PS.ALPHA_TRANSPARENT );
+            PS.alpha( x, y+1, PS.ALPHA_TRANSPARENT );
+            PS.alpha( x+1, y+1, PS.ALPHA_TRANSPARENT );
+            PS.alpha( x-1, y-1, PS.ALPHA_TRANSPARENT );
+            PS.alpha( x-1, y, PS.ALPHA_TRANSPARENT );
+            PS.alpha( x, y-1, PS.ALPHA_TRANSPARENT );
+            PS.alpha( x+1, y-1, PS.ALPHA_TRANSPARENT );
+            PS.alpha( x-1, y+1, PS.ALPHA_TRANSPARENT );
+
+            PS.gridPlane(0);
+
+
+        },
+
+
+        getPreset : function( desiredColor ) {
+
+            if (desiredColor === "COLOR_FLOOR") {
+                return COLOR_FLOOR;
+            }
+            else if (desiredColor === "COLOR_AREA") {
+                return COLOR_AREA;
+            }
+            else if (desiredColor === "COLOR_GOAL") {
+                return COLOR_GOAL;
+            }
+            else if (desiredColor === "COLOR_DEF") {
+                return COLOR_DEF;
+            }
+            else if (desiredColor === "COLOR_RETICLE") {
+                return COLOR_RETICLE;
+            }
+            else if (desiredColor === "COLOR_WALL") {
+                return COLOR_WALL;
+            }
 
         },
 
@@ -434,8 +490,9 @@ var G = (function() {
 
 
         //Sets the global color variable to establish the color of the vector
-        colorSet (colorVar) {
+        colorSet : function (colorVar) {
             colorG = colorVar;
+            PS.debug("color g " + colorG + "\n");
 
         },
 
@@ -490,7 +547,10 @@ var G = (function() {
                         PS.color( x, y, COLOR_WALL );
                     }
                     else if ( selectedBoard[(y*17) + x] === 2) {
+                        PS.gridPlane(1);
                         PS.color( x, y, COLOR_DEF );
+                        PS.alpha( x, y, PS.ALPHA_OPAQUE )
+                        PS.gridPlane(0);
                     }
                     else if ( selectedBoard[(y*17) + x] === 3) {
                         PS.color( x, y, COLOR_AREA );
@@ -505,23 +565,23 @@ var G = (function() {
             }
 
 
-            PS.audioLoad( "xylo_c5" );//1
-            PS.audioLoad( "xylo_db5" );//2
-            PS.audioLoad( "xylo_d5" );//3
-            PS.audioLoad( "xylo_eb5" );//4
-            PS.audioLoad( "xylo_e5" );//5
-            PS.audioLoad( "xylo_f5" );//6
-            PS.audioLoad( "xylo_gb5" );//7
-            PS.audioLoad( "xylo_g5" );//8
-            PS.audioLoad( "xylo_ab5" );//9
-            PS.audioLoad( "xylo_a5" );//10
-            PS.audioLoad( "xylo_bb5" );//11
-            PS.audioLoad( "xylo_b5" );//12
-            PS.audioLoad( "xylo_c6" );//13
-            PS.audioLoad( "xylo_db6" );//14
-            PS.audioLoad( "xylo_d6" );//15
-            PS.audioLoad( "xylo_eb6" );//16
-            PS.audioLoad( "fx_squawk");//Duck Squak on failure
+            PS.audioLoad( "xylo_c5" ); //1
+            PS.audioLoad( "xylo_db5" ); //2
+            PS.audioLoad( "xylo_d5" ); //3
+            PS.audioLoad( "xylo_eb5" ); //4
+            PS.audioLoad( "xylo_e5" ); //5
+            PS.audioLoad( "xylo_f5" ); //6
+            PS.audioLoad( "xylo_gb5" ); //7
+            PS.audioLoad( "xylo_g5" ); //8
+            PS.audioLoad( "xylo_ab5" ); //9
+            PS.audioLoad( "xylo_a5" ); //10
+            PS.audioLoad( "xylo_bb5" ); //11
+            PS.audioLoad( "xylo_b5" ); //12
+            PS.audioLoad( "xylo_c6" ); //13
+            PS.audioLoad( "xylo_db6" ); //14
+            PS.audioLoad( "xylo_d6" ); //15
+            PS.audioLoad( "xylo_eb6" ); //16
+            PS.audioLoad( "fx_squawk"); //Duck Squak on failure
 
 
         }
@@ -560,16 +620,25 @@ PS.touch = function( x, y, data, options ) {
     g = PS.random(256) - 1; // random green
     b = PS.random(256) - 1; // random blue
 
-    if (G.energyLifePrint() > 0) {
-        var color = PS.color( x, y, r, g, b ); // set bead color
-        G.firstClickSetup(x, y);
-        G.colorSet(color);
 
-    }
-    else {
-        PS.statusColor(PS.COLOR_RED);
-        PS.statusText("OUT OF ENERGY");
-        PS.audioPlay("fx_squawk");
+    if(PS.color(x, y) === G.getPreset("COLOR_AREA")) {
+        PS.debug("x and y within touch: " + x + " " + y + "\n");
+        if (G.energyLifePrint() > 0) {
+            PS.debug("Good Energy");
+            PS.gridPlane(1);
+            var color = PS.color(x, y, r, g, b); // set bead color
+            PS.alpha( x, y, PS.ALPHA_OPAQUE );
+            PS.gridPlane(0);
+            PS.debug(color + " color" + "\n");
+            G.colorSet(color);
+            G.firstClickSetup(x, y);
+        }
+        else {
+            PS.statusColor(PS.COLOR_RED);
+            PS.statusText("OUT OF ENERGY");
+            PS.audioPlay("fx_squawk");
+        }
+
     }
 
 };
@@ -597,18 +666,20 @@ PS.release = function( x, y, data, options ) {
 
 	// Add code here for when the mouse button/touch is released over a bead.
 
-    if (G.energyLifeManip()) {
+    if(PS.color(x, y) === G.getPreset("COLOR_RETICLE")) {
+        if (G.energyLifeManip()) {
+            PS.debug("LIFTOFF");
+            PS.statusColor(PS.COLOR_BLUE);
+            PS.statusText("Energy is : " + G.energyLifePrint());
 
-        PS.statusColor(PS.COLOR_BLUE);
-        PS.statusText("Energy is : " + G.energyLifePrint());
+            // Add code here for mouse clicks/touches over a bead.
 
-        // Add code here for mouse clicks/touches over a bead.
+            G.start(x, y);
 
-        G.start(x, y);
 
+        }
 
     }
-
 
 };
 
