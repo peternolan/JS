@@ -26,6 +26,8 @@ Called once after engine is initialized but before event-polling begins.
 
 var G = (function() {
 
+    //Board Configurations
+
     var board1 = [
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
         1,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,1,
@@ -88,9 +90,9 @@ var G = (function() {
 
     var board4 = [
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-        1,3,3,3,2,2,2,0,3,3,3,3,3,3,3,3,1,
-        1,4,3,2,2,2,0,3,3,3,3,3,3,3,3,3,1,
-        1,3,2,2,2,0,3,3,3,3,3,3,3,3,3,3,1,
+        1,0,0,0,2,2,2,0,3,3,3,3,3,3,3,3,1,
+        1,4,0,2,2,2,0,3,3,3,3,3,3,3,3,3,1,
+        1,0,2,2,2,0,3,3,3,3,3,3,3,3,3,3,1,
         1,2,2,2,0,3,3,3,3,3,3,3,3,3,3,3,1,
         1,2,2,0,3,3,3,3,3,3,3,3,3,3,3,3,1,
         1,2,0,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
@@ -107,23 +109,35 @@ var G = (function() {
     ];
 
 
-    var WIDTH = 17; // width of grid
-    var HEIGHT = 17; // height of grid
-
+    //For Board Configuration Choosing
     var lastSeed;
     lastSeed = 0;
 
 
-    var musicTrack = 0;
+    //Amount of Attempts Player has left.
+    var energyLife = 3;
 
-    var xglobe = 0;
+
+    var WIDTH = 17; // width of grid
+    var HEIGHT = 17; // height of grid
+
+    var colorG = 0;//Color of Vector on creation.
+
+    var musicTrack = 0;//Current note being played on vector creation.
+
+    var xglobe = 0;//Current Position of edge of vector
     var yglobe = 0;
+
+    // Position where the cursor is lifted up from
+    var xLift = 0;
+    var yLift = 0;
 
     var COLOR_FLOOR = PS.COLOR_WHITE; // floor color
     var COLOR_WALL = PS.COLOR_BLACK; // wall color
     var COLOR_DEF = PS.COLOR_GRAY; // def color
-    var COLOR_AREA = PS.COLOR_GREEN; // def color
-    var COLOR_GOAL = PS.COLOR_YELLOW; // def color
+    var COLOR_AREA = 0x45FFA8; // Area color
+    var COLOR_GOAL = PS.COLOR_YELLOW; // Goal color
+    var COLOR_RETICLE = 0xA1A7FF;//Retical color
 
     var timer = null; // timer id, null if none
 
@@ -145,6 +159,10 @@ var G = (function() {
     var exports = {
 
 
+        //Function that erases vector. Is put through a timer in "end"
+        //x: original x position of starting point
+        //y: original y position of starting point
+        //h, v: horiz and verticle direction that the vector is moving in each cycle.
         endMove : function (x, y, h, v) {
 
 
@@ -164,93 +182,122 @@ var G = (function() {
             if (PS.color(xglobe, yglobe) === COLOR_WALL) {
                 PS.timerStop(timer);
                 timer = null;
+                PS.gridPlane(0);
             }
             else if (PS.color(xglobe, yglobe) === COLOR_DEF) {
                 PS.audioPlay(musicOST[musicTrack]);
-                musicTrack++;
+                musicTrack--;
                 PS.color(xglobe, yglobe, COLOR_FLOOR);
                 PS.timerStop(timer);
+                PS.gridPlane(0);
                 timer = null;
             }
             else if (PS.color(xglobe, yglobe) === COLOR_GOAL) {
                 PS.audioPlay(musicOST[musicTrack]);
-                musicTrack++;
+                musicTrack--;
                 PS.color(xglobe, yglobe, COLOR_FLOOR);
                 PS.timerStop(timer);
+                PS.gridPlane(0);
                 timer = null;
+            }
+            else if (PS.color(xglobe, yglobe) === COLOR_AREA) {
+                PS.audioPlay(musicOST[musicTrack]);
+                musicTrack--;
+                PS.color(xglobe, yglobe, COLOR_AREA);
+                PS.timerStop(timer);
+                timer = null;
+                PS.gridPlane(0);
             }
             else {
                 PS.debug( "In ELSE \n")
                 PS.audioPlay(musicOST[musicTrack]);
-                musicTrack++;
-                PS.color(xglobe, yglobe, COLOR_FLOOR);
+                musicTrack--;
+                PS.alpha( xglobe, yglobe, PS.ALPHA_TRANSPARENT );
+
             }
 
 
         },
 
 
-        end : function ( x, y, rand) {
+        //Function that erases vector. Is put through a timer in "end"
+        //x: original x position of starting point
+        //y: original y position of starting point
+        end : function (x, y) {
+
+            PS.debug("END\n");
 
 
-            PS.debug("END");
 
             xglobe = x;
             yglobe = y;
 
 
+            PS.debug("xglobe " + xglobe + "\n");
+            PS.debug("yglobe " + yglobe + "\n");
+            PS.debug("xLift " + xLift + "\n");
+            PS.debug("xLift " + yLift + "\n");
+
+
             PS.audioPlay(musicOST[musicTrack]);
             musicTrack--;
-            PS.color( xglobe, yglobe, COLOR_FLOOR); // set bead color
+            PS.alpha( xglobe, yglobe, PS.ALPHA_TRANSPARENT );
 
             if (!timer) {
-                switch (rand) {
-                    case 0:
-                        //North
-                        timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 0, 1);
-                        break;
 
-                    case 1:
-                        //East
-                        timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 1, 0);
-                        break;
+                PS.debug("Timer Check\n");
 
-                    case 2:
-                        //NorthEast
-                        timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 1, 1);
-                        break;
-
-                    case 3:
-                        //NorthWest
-                        timer = PS.timerStart(60, G.endMove, xglobe, yglobe, -1, 1);
-                        break;
-
-                    case 4:
-                        //SouthWest
-                        timer = PS.timerStart(60, G.endMove, xglobe, yglobe, -1, -1);
-                        break;
-
-                    case 5:
-                        //South
-                        timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 0, -1);
-                        break;
-
-                    case 6:
-                        //West
-                        timer = PS.timerStart(60, G.endMove, xglobe, yglobe, -1, 0);
-                        break;
-
-                    case 7:
-                        //SouthEast
-                        timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 1, -1);
-                        break;
-
+                //WEast
+                if (xglobe < xLift && yglobe === yLift) {
+                    PS.debug("East\n");
+                    timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 1, 0);
                 }
+                //NorthEast
+                else if (xglobe < xLift && yglobe < yLift) {
+                    PS.debug("NorthEast\n");
+                    timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 1, 1);
+                }
+                //North
+                else if (xglobe === xLift && yglobe < yLift) {
+                    PS.debug("North\n");
+                    timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 0, 1);
+                }
+                //NorthWest
+                else if (xglobe > xLift && yglobe < yLift) {
+                    PS.debug("NorthWest\n");
+                    timer = PS.timerStart(60, G.endMove, xglobe, yglobe, -1, 1);
+                }
+                //West
+                else if (xglobe > xLift && yglobe === yLift) {
+                    PS.debug("West\n");
+                    timer = PS.timerStart(60, G.endMove, xglobe, yglobe, -1, 0);
+                }
+                //SouthWest
+                else if (xglobe > xLift && yglobe > yLift) {
+                    PS.debug("SouthWest\n");
+                    timer = PS.timerStart(60, G.endMove, xglobe, yglobe, -1, -1);
+                }
+                //South
+                else if (xglobe === xLift && yglobe > yLift) {
+                    PS.debug("South\n");
+                    timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 0, -1);
+                }
+                //SouthEast
+                else if (xglobe < xLift && yglobe > yLift) {
+                    PS.debug("SouthEest\n");
+                    timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 1, -1);
+                }
+
             }
+
         },
 
 
-        move : function ( x, y, h, v, r, g, b, rand) {
+        //Function that erases vector. Is put through a timer in "end"
+        //x: original x position of starting point
+        //y: original y position of starting point
+        //h, v: horiz and verticle direction that the vector is moving in each cycle.
+        move : function ( x, y, h, v) {
 
             PS.debug("x, y b4 " + x + " " + y + "\n");
             PS.debug("h, v" + h + " " + v + "\n");
@@ -260,98 +307,192 @@ var G = (function() {
 
             PS.debug("x, y after " + x + " " + y + "\n");
 
-            PS.debug( "PS.Color " + PS.color(x, y) + "\n")
+            PS.debug( "PS.Color " + colorG + "\n")
             PS.debug( "Wall " + COLOR_WALL + "\n")
             PS.debug( "Def " + COLOR_DEF + "\n")
             PS.debug( "Floor" + COLOR_FLOOR + "\n")
 
+
             if (PS.color(xglobe, yglobe) === COLOR_WALL) {
                 PS.timerStop(timer);
                 timer = null;
-                G.end(x, y, rand);
+                G.end(x, y);
             }
             else if (PS.color(xglobe, yglobe) === COLOR_DEF) {
                 PS.timerStop(timer);
                 timer = null;
-                G.end(x, y, rand);
+                G.end(x, y);
             }
             else if (PS.color(xglobe, yglobe) === COLOR_GOAL) {
                 PS.timerStop(timer);
                 timer = null;
-                G.end(x, y, rand);
+                G.end(x, y);
             }
             else {
                 PS.debug( "In ELSE \n")
+
                 PS.audioPlay(musicOST[musicTrack]);
                 musicTrack++;
-                PS.color(xglobe, yglobe, r, g, b);
+                PS.color(xglobe, yglobe, colorG);
+                PS.alpha( xglobe, yglobe, PS.ALPHA_OPAQUE );
             }
 
         },
 
 
 
-        start : function (x, y, r, g, b) {
+        //Function that erases vector. Is put through a timer in "end"
+        //x: original x position of starting point
+        //y: original y position of starting point
+        start : function (x, y) {
+
+            xLift = x;
+            yLift = y;
+
+            G.firstClickEnd(xglobe, yglobe)
+            PS.gridPlane(1);
 
             if (!timer) {
 
-                xglobe = x;
-                yglobe = y;
+                //West
+                if (xglobe < x && yglobe === y) {
+                    timer = PS.timerStart(60, G.move, xglobe, yglobe, 1, 0);
+                }
+                //NorthEast
+                else if (xglobe < x && yglobe < y) {
+                    timer = PS.timerStart(60, G.move, xglobe, yglobe, 1, 1);
+                }
+                //North
+                else if (xglobe === x && yglobe < y) {
+                    timer = PS.timerStart(60, G.move, xglobe, yglobe, 0, 1);
+                }
+                //NorthWest
+                else if (xglobe > x && yglobe < y) {
+                    timer = PS.timerStart(60, G.move, xglobe, yglobe, -1, 1);
+                }
+                //West
+                else if (xglobe > x && yglobe === y) {
+                    timer = PS.timerStart(60, G.move, xglobe, yglobe, -1, 0);
+                }
+                //SouthWest
+                else if (xglobe > x && yglobe > y) {
+                    timer = PS.timerStart(60, G.move, xglobe, yglobe, -1, -1);
+                }
+                //South
+                else if (xglobe === x && yglobe > y) {
+                    timer = PS.timerStart(60, G.move, xglobe, yglobe, 0, -1);
+                }
+                //SouthEast
+                else if (xglobe < x && yglobe > y) {
+                    timer = PS.timerStart(60, G.move, xglobe, yglobe, 1, -1);
+                }
+                else {
+                    energyLife++;
+                }
+
                 musicTrack = 0;
                 musicTrack++;
-
-                PS.color( xglobe, yglobe, r, g, b ); // set bead color
-
-                var rand = PS.random(7);
-
-                switch (rand) {
-                    case 0:
-                        //North
-                        timer = PS.timerStart(60, G.move, x, y, 0, 1, r, g, b, rand);
-                        break;
-
-                    case 1:
-                        //East
-                        timer = PS.timerStart(60, G.move, x, y, 1, 0, r, g, b, rand);
-                        break;
-
-                    case 2:
-                        //NorthEast
-                        timer = PS.timerStart(60, G.move, x, y, 1, 1, r, g, b, rand);
-                        break;
-
-                    case 3:
-                        //NorthWest
-                        timer = PS.timerStart(60, G.move, x, y, -1, 1, r, g, b, rand);
-                        break;
-
-                    case 4:
-                        //SouthWest
-                        timer = PS.timerStart(60, G.move, x, y, -1, -1, r, g, b, rand);
-                        break;
-
-                    case 5:
-                        //South
-                        timer = PS.timerStart(60, G.move, x, y, 0, -1, r, g, b, rand);
-                        break;
-
-                    case 6:
-                        //West
-                        timer = PS.timerStart(60, G.move, x, y, -1, 0, r, g, b, rand);
-                        break;
-
-                    case 7:
-                        //SouthEast
-                        timer = PS.timerStart(60, G.move, x, y, 1, -1, r, g, b, rand);
-                        break;
-
-                }
 
                 PS.audioPlay( "fx_ding" );
 
             }
 
-            return rand;
+        },
+
+
+        //Function that creates the reticle for the player to use.
+        firstClickSetup : function (x, y) {
+
+            xglobe = x;
+            yglobe = y;
+
+            PS.gridPlane(1);
+
+            PS.color( x+1, y, COLOR_RETICLE);
+            PS.alpha( x+1, y, PS.ALPHA_OPAQUE )
+            PS.color( x, y+1, COLOR_RETICLE );
+            PS.alpha( x, y+1, PS.ALPHA_OPAQUE )
+            PS.color( x+1, y+1, COLOR_RETICLE );
+            PS.alpha( x+1, y+1, PS.ALPHA_OPAQUE )
+            PS.color( x-1, y-1, COLOR_RETICLE );
+            PS.alpha( x-1, y-1, PS.ALPHA_OPAQUE )
+            PS.color( x-1, y, COLOR_RETICLE );
+            PS.alpha( x-1, y, PS.ALPHA_OPAQUE )
+            PS.color( x, y-1, COLOR_RETICLE );
+            PS.alpha( x, y-1, PS.ALPHA_OPAQUE )
+            PS.color( x+1, y-1, COLOR_RETICLE );
+            PS.alpha( x+1, y-1, PS.ALPHA_OPAQUE )
+            PS.color( x-1, y+1, COLOR_RETICLE );
+            PS.alpha( x-1, y+1, PS.ALPHA_OPAQUE )
+
+
+
+
+        },
+
+        //Function that gets rid of the reticle.
+        firstClickEnd : function (x, y) {
+
+
+            PS.alpha( x+1, y, PS.ALPHA_TRANSPARENT );
+            PS.alpha( x, y+1, PS.ALPHA_TRANSPARENT );
+            PS.alpha( x+1, y+1, PS.ALPHA_TRANSPARENT );
+            PS.alpha( x-1, y-1, PS.ALPHA_TRANSPARENT );
+            PS.alpha( x-1, y, PS.ALPHA_TRANSPARENT );
+            PS.alpha( x, y-1, PS.ALPHA_TRANSPARENT );
+            PS.alpha( x+1, y-1, PS.ALPHA_TRANSPARENT );
+            PS.alpha( x-1, y+1, PS.ALPHA_TRANSPARENT );
+
+            PS.gridPlane(0);
+
+
+        },
+
+
+        getPreset : function( desiredColor ) {
+
+            if (desiredColor === "COLOR_FLOOR") {
+                return COLOR_FLOOR;
+            }
+            else if (desiredColor === "COLOR_AREA") {
+                return COLOR_AREA;
+            }
+            else if (desiredColor === "COLOR_GOAL") {
+                return COLOR_GOAL;
+            }
+            else if (desiredColor === "COLOR_DEF") {
+                return COLOR_DEF;
+            }
+            else if (desiredColor === "COLOR_RETICLE") {
+                return COLOR_RETICLE;
+            }
+            else if (desiredColor === "COLOR_WALL") {
+                return COLOR_WALL;
+            }
+
+        },
+
+        //Reduces energy for each touch.
+        energyLifeManip : function () {
+            if (energyLife > 0) {
+                energyLife--;
+                return true;
+            }
+            else return false;
+
+        },
+
+        //Sends the energy function.
+        energyLifePrint : function () {
+            return energyLife;
+
+        },
+
+
+        //Sets the global color variable to establish the color of the vector
+        colorSet : function (colorVar) {
+            colorG = colorVar;
+            PS.debug("color g " + colorG + "\n");
 
         },
 
@@ -361,6 +502,10 @@ var G = (function() {
         init : function () {
             PS.gridSize( WIDTH, HEIGHT ); // init grid
             PS.border( PS.ALL, PS.ALL, 0 ); // no borders
+
+            energyLife = 3;
+
+
 
             PS.seed(PS.date().time);
             var selectedBoard;
@@ -396,14 +541,16 @@ var G = (function() {
 
 
 
-
             for ( var x = 0; x < 17; x += 1 ) {
                 for ( var y = 0; y < 17; y += 1 ) {
                     if ( selectedBoard[(y*17) + x] === 1) {
                         PS.color( x, y, COLOR_WALL );
                     }
                     else if ( selectedBoard[(y*17) + x] === 2) {
+                        PS.gridPlane(1);
                         PS.color( x, y, COLOR_DEF );
+                        PS.alpha( x, y, PS.ALPHA_OPAQUE )
+                        PS.gridPlane(0);
                     }
                     else if ( selectedBoard[(y*17) + x] === 3) {
                         PS.color( x, y, COLOR_AREA );
@@ -418,22 +565,23 @@ var G = (function() {
             }
 
 
-            PS.audioLoad( "xylo_c5" );//1
-            PS.audioLoad( "xylo_db5" );//2
-            PS.audioLoad( "xylo_d5" );//3
-            PS.audioLoad( "xylo_eb5" );//4
-            PS.audioLoad( "xylo_e5" );//5
-            PS.audioLoad( "xylo_f5" );//6
-            PS.audioLoad( "xylo_gb5" );//7
-            PS.audioLoad( "xylo_g5" );//8
-            PS.audioLoad( "xylo_ab5" );//9
-            PS.audioLoad( "xylo_a5" );//10
-            PS.audioLoad( "xylo_bb5" );//11
-            PS.audioLoad( "xylo_b5" );//12
-            PS.audioLoad( "xylo_c6" );//13
-            PS.audioLoad( "xylo_db6" );//14
-            PS.audioLoad( "xylo_d6" );//15
-            PS.audioLoad( "xylo_eb6" );//16
+            PS.audioLoad( "xylo_c5" ); //1
+            PS.audioLoad( "xylo_db5" ); //2
+            PS.audioLoad( "xylo_d5" ); //3
+            PS.audioLoad( "xylo_eb5" ); //4
+            PS.audioLoad( "xylo_e5" ); //5
+            PS.audioLoad( "xylo_f5" ); //6
+            PS.audioLoad( "xylo_gb5" ); //7
+            PS.audioLoad( "xylo_g5" ); //8
+            PS.audioLoad( "xylo_ab5" ); //9
+            PS.audioLoad( "xylo_a5" ); //10
+            PS.audioLoad( "xylo_bb5" ); //11
+            PS.audioLoad( "xylo_b5" ); //12
+            PS.audioLoad( "xylo_c6" ); //13
+            PS.audioLoad( "xylo_db6" ); //14
+            PS.audioLoad( "xylo_d6" ); //15
+            PS.audioLoad( "xylo_eb6" ); //16
+            PS.audioLoad( "fx_squawk"); //Duck Squak on failure
 
 
         }
@@ -468,12 +616,30 @@ PS.touch = function( x, y, data, options ) {
     var r, g, b;
     // Uncomment the following code line to inspect x/y parameters:
 
-    // Add code here for mouse clicks/touches over a bead.
     r = PS.random(256) - 1; // random red 0-255
     g = PS.random(256) - 1; // random green
     b = PS.random(256) - 1; // random blue
 
-    G.start( x, y, r, g, b);
+
+    if(PS.color(x, y) === G.getPreset("COLOR_AREA")) {
+        PS.debug("x and y within touch: " + x + " " + y + "\n");
+        if (G.energyLifePrint() > 0) {
+            PS.debug("Good Energy");
+            PS.gridPlane(1);
+            var color = PS.color(x, y, r, g, b); // set bead color
+            PS.alpha( x, y, PS.ALPHA_OPAQUE );
+            PS.gridPlane(0);
+            PS.debug(color + " color" + "\n");
+            G.colorSet(color);
+            G.firstClickSetup(x, y);
+        }
+        else {
+            PS.statusColor(PS.COLOR_RED);
+            PS.statusText("OUT OF ENERGY");
+            PS.audioPlay("fx_squawk");
+        }
+
+    }
 
 };
 
@@ -491,7 +657,7 @@ It doesn't have to do anything
 
 // Uncomment the following BLOCK to expose PS.release() event handler:
 
-/*
+
 
 PS.release = function( x, y, data, options ) {
 	// Uncomment the following code line to inspect x/y parameters:
@@ -499,9 +665,25 @@ PS.release = function( x, y, data, options ) {
 	// PS.debug( "PS.release() @ " + x + ", " + y + "\n" );
 
 	// Add code here for when the mouse button/touch is released over a bead.
+
+    if(PS.color(x, y) === G.getPreset("COLOR_RETICLE")) {
+        if (G.energyLifeManip()) {
+            PS.debug("LIFTOFF");
+            PS.statusColor(PS.COLOR_BLUE);
+            PS.statusText("Energy is : " + G.energyLifePrint());
+
+            // Add code here for mouse clicks/touches over a bead.
+
+            G.start(x, y);
+
+
+        }
+
+    }
+
 };
 
-*/
+
 
 /*
 PS.enter ( x, y, button, data, options )
