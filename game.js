@@ -190,6 +190,7 @@ var G = (function() {
                 PS.color(xglobe, yglobe, COLOR_FLOOR);
                 PS.timerStop(timer);
                 PS.gridPlane(0);
+
                 timer = null;
             }
             else if (PS.color(xglobe, yglobe) === COLOR_GOAL) {
@@ -197,6 +198,9 @@ var G = (function() {
                 musicTrack--;
                 PS.color(xglobe, yglobe, COLOR_FLOOR);
                 PS.timerStop(timer);
+                PS.statusColor(0x3FF40);
+                PS.statusText("YOU WIN!!!");
+                PS.audioPlay("fx_tada");
                 PS.gridPlane(0);
                 timer = null;
             }
@@ -406,7 +410,7 @@ var G = (function() {
             xglobe = x;
             yglobe = y;
 
-            PS.gridPlane(1);
+            PS.gridPlane(2);
 
             PS.color( x+1, y, COLOR_RETICLE);
             PS.alpha( x+1, y, PS.ALPHA_OPAQUE )
@@ -544,7 +548,10 @@ var G = (function() {
             for ( var x = 0; x < 17; x += 1 ) {
                 for ( var y = 0; y < 17; y += 1 ) {
                     if ( selectedBoard[(y*17) + x] === 1) {
+                        PS.gridPlane(1);
                         PS.color( x, y, COLOR_WALL );
+                        PS.alpha( x, y, PS.ALPHA_OPAQUE )
+                        PS.gridPlane(0);
                     }
                     else if ( selectedBoard[(y*17) + x] === 2) {
                         PS.gridPlane(1);
@@ -556,7 +563,10 @@ var G = (function() {
                         PS.color( x, y, COLOR_AREA );
                     }
                     else if ( selectedBoard[(y*17) + x] === 4) {
+                        PS.gridPlane(1);
                         PS.color( x, y, COLOR_GOAL );
+                        PS.alpha( x, y, PS.ALPHA_OPAQUE )
+                        PS.gridPlane(0);
                     }
                     else {
                         PS.color( x, y, COLOR_FLOOR );
@@ -581,7 +591,8 @@ var G = (function() {
             PS.audioLoad( "xylo_db6" ); //14
             PS.audioLoad( "xylo_d6" ); //15
             PS.audioLoad( "xylo_eb6" ); //16
-            PS.audioLoad( "fx_squawk"); //Duck Squak on failure
+            PS.audioLoad( "fx_squawk" ); //Duck Squak on failure
+            PS.audioLoad( "fx_tada" );//WIN!!!
 
 
         }
@@ -660,11 +671,11 @@ It doesn't have to do anything
 
 
 PS.release = function( x, y, data, options ) {
-	// Uncomment the following code line to inspect x/y parameters:
+    // Uncomment the following code line to inspect x/y parameters:
 
-	// PS.debug( "PS.release() @ " + x + ", " + y + "\n" );
+    // PS.debug( "PS.release() @ " + x + ", " + y + "\n" );
 
-	// Add code here for when the mouse button/touch is released over a bead.
+    // Add code here for when the mouse button/touch is released over a bead.
 
     if(PS.color(x, y) === G.getPreset("COLOR_RETICLE")) {
         if (G.energyLifeManip()) {
@@ -698,15 +709,11 @@ It doesn't have to do anything.
 // Uncomment the following BLOCK to expose PS.enter() event handler:
 
 /*
-
 PS.enter = function( x, y, data, options ) {
 	// Uncomment the following code line to inspect x/y parameters:
-
 	// PS.debug( "PS.enter() @ " + x + ", " + y + "\n" );
-
 	// Add code here for when the mouse cursor/touch enters a bead.
 };
-
 */
 
 /*
@@ -722,15 +729,11 @@ It doesn't have to do anything.
 // Uncomment the following BLOCK to expose PS.exit() event handler:
 
 /*
-
 PS.exit = function( x, y, data, options ) {
 	// Uncomment the following code line to inspect x/y parameters:
-
 	// PS.debug( "PS.exit() @ " + x + ", " + y + "\n" );
-
 	// Add code here for when the mouse cursor/touch exits a bead.
 };
-
 */
 
 /*
@@ -743,15 +746,11 @@ It doesn't have to do anything.
 // Uncomment the following BLOCK to expose PS.exitGrid() event handler:
 
 /*
-
 PS.exitGrid = function( options ) {
 	// Uncomment the following code line to verify operation:
-
 	// PS.debug( "PS.exitGrid() called\n" );
-
 	// Add code here for when the mouse cursor/touch moves off the grid.
 };
-
 */
 
 /*
@@ -768,15 +767,11 @@ http://users.wpi.edu/~bmoriarty/ps/constants.html
 // Uncomment the following BLOCK to expose PS.keyDown() event handler:
 
 /*
-
 PS.keyDown = function( key, shift, ctrl, options ) {
 	// Uncomment the following code line to inspect first three parameters:
-
 	// PS.debug( "PS.keyDown(): key=" + key + ", shift=" + shift + ", ctrl=" + ctrl + "\n" );
-
 	// Add code here for when a key is pressed.
 };
-
 */
 
 /*
@@ -793,15 +788,11 @@ http://users.wpi.edu/~bmoriarty/ps/constants.html
 // Uncomment the following BLOCK to expose PS.keyUp() event handler:
 
 /*
-
 PS.keyUp = function( key, shift, ctrl, options ) {
 	// Uncomment the following code line to inspect first three parameters:
-
 	// PS.debug( "PS.keyUp(): key=" + key + ", shift=" + shift + ", ctrl=" + ctrl + "\n" );
-
 	// Add code here for when a key is released.
 };
-
 */
 
 /*
@@ -816,19 +807,15 @@ NOTE: Mouse wheel events occur ONLY when the cursor is positioned over the grid.
 // Uncomment the following BLOCK to expose PS.input() event handler:
 
 /*
-
 PS.input = function( sensors, options ) {
 	// Uncomment the following code lines to inspect first parameter:
-
 //	 var device = sensors.wheel; // check for scroll wheel
 //
 //	 if ( device ) {
 //	   PS.debug( "PS.input(): " + device + "\n" );
 //	 }
-
 	// Add code here for when an input event is detected.
 };
-
 */
 
 /*
@@ -842,32 +829,25 @@ NOTE: This event is only used for applications utilizing server communication.
 // Uncomment the following BLOCK to expose PS.shutdown() event handler:
 
 /*
-
 PS.shutdown = function( options ) {
 	// Uncomment the following code line to verify operation:
-
 	// PS.debug( "Daisy, Daisy ...\n" );
-
 	// Add code here for when Perlenspiel is about to close.
 };
-
 */
 
 /*
 Perlenspiel is a scheme by Professor Moriarty (bmoriarty@wpi.edu).
 Perlenspiel is Copyright © 2009-17 Worcester Polytechnic Institute.
 This file is part of Perlenspiel.
-
 Perlenspiel is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published
 by the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
-
 Perlenspiel is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU Lesser General Public License for more details.
-
 You may have received a copy of the GNU Lesser General Public License
 along with Perlenspiel. If not, see <http://www.gnu.org/licenses/>.
 */
