@@ -166,19 +166,8 @@ var G = (function() {
         endMove : function (x, y, h, v) {
 
 
-            PS.debug("x, y b4 " + x + " " + y + "\n");
-            PS.debug("h, v" + h + " " + v + "\n");
-
             xglobe += h; // update grabber's x-pos
             yglobe += v; // update grabber's y-pos
-
-            PS.debug("x, y after " + x + " " + y + "\n");
-
-            PS.debug( "PS.Color " + PS.color(x, y) + "\n")
-            PS.debug( "Wall " + COLOR_WALL + "\n")
-            PS.debug( "Def " + COLOR_DEF + "\n")
-            PS.debug( "Floor" + COLOR_FLOOR + "\n")
-
             if (PS.color(xglobe, yglobe) === COLOR_WALL) {
                 PS.timerStop(timer);
                 timer = null;
@@ -213,7 +202,7 @@ var G = (function() {
                 PS.gridPlane(0);
             }
             else {
-                PS.debug( "In ELSE \n")
+
                 PS.audioPlay(musicOST[musicTrack]);
                 musicTrack--;
                 PS.alpha( xglobe, yglobe, PS.ALPHA_TRANSPARENT );
@@ -229,19 +218,8 @@ var G = (function() {
         //y: original y position of starting point
         end : function (x, y) {
 
-            PS.debug("END\n");
-
-
-
             xglobe = x;
             yglobe = y;
-
-
-            PS.debug("xglobe " + xglobe + "\n");
-            PS.debug("yglobe " + yglobe + "\n");
-            PS.debug("xLift " + xLift + "\n");
-            PS.debug("xLift " + yLift + "\n");
-
 
             PS.audioPlay(musicOST[musicTrack]);
             musicTrack--;
@@ -249,46 +227,43 @@ var G = (function() {
 
             if (!timer) {
 
-                PS.debug("Timer Check\n");
-
                 //WEast
                 if (xglobe < xLift && yglobe === yLift) {
-                    PS.debug("East\n");
+
                     timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 1, 0);
                 }
                 //NorthEast
                 else if (xglobe < xLift && yglobe < yLift) {
-                    PS.debug("NorthEast\n");
+
                     timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 1, 1);
                 }
                 //North
                 else if (xglobe === xLift && yglobe < yLift) {
-                    PS.debug("North\n");
+
                     timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 0, 1);
                 }
                 //NorthWest
                 else if (xglobe > xLift && yglobe < yLift) {
-                    PS.debug("NorthWest\n");
+
                     timer = PS.timerStart(60, G.endMove, xglobe, yglobe, -1, 1);
                 }
                 //West
                 else if (xglobe > xLift && yglobe === yLift) {
-                    PS.debug("West\n");
                     timer = PS.timerStart(60, G.endMove, xglobe, yglobe, -1, 0);
                 }
                 //SouthWest
                 else if (xglobe > xLift && yglobe > yLift) {
-                    PS.debug("SouthWest\n");
+
                     timer = PS.timerStart(60, G.endMove, xglobe, yglobe, -1, -1);
                 }
                 //South
                 else if (xglobe === xLift && yglobe > yLift) {
-                    PS.debug("South\n");
+
                     timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 0, -1);
                 }
                 //SouthEast
                 else if (xglobe < xLift && yglobe > yLift) {
-                    PS.debug("SouthEest\n");
+
                     timer = PS.timerStart(60, G.endMove, xglobe, yglobe, 1, -1);
                 }
 
@@ -303,18 +278,8 @@ var G = (function() {
         //h, v: horiz and verticle direction that the vector is moving in each cycle.
         move : function ( x, y, h, v) {
 
-            PS.debug("x, y b4 " + x + " " + y + "\n");
-            PS.debug("h, v" + h + " " + v + "\n");
-
             xglobe += h; // update grabber's x-pos
             yglobe += v; // update grabber's y-pos
-
-            PS.debug("x, y after " + x + " " + y + "\n");
-
-            PS.debug( "PS.Color " + colorG + "\n")
-            PS.debug( "Wall " + COLOR_WALL + "\n")
-            PS.debug( "Def " + COLOR_DEF + "\n")
-            PS.debug( "Floor" + COLOR_FLOOR + "\n")
 
 
             if (PS.color(xglobe, yglobe) === COLOR_WALL) {
@@ -333,7 +298,6 @@ var G = (function() {
                 G.end(x, y);
             }
             else {
-                PS.debug( "In ELSE \n")
 
                 PS.audioPlay(musicOST[musicTrack]);
                 musicTrack++;
@@ -496,7 +460,7 @@ var G = (function() {
         //Sets the global color variable to establish the color of the vector
         colorSet : function (colorVar) {
             colorG = colorVar;
-            PS.debug("color g " + colorG + "\n");
+
 
         },
 
@@ -633,14 +597,12 @@ PS.touch = function( x, y, data, options ) {
 
 
     if(PS.color(x, y) === G.getPreset("COLOR_AREA")) {
-        PS.debug("x and y within touch: " + x + " " + y + "\n");
+
         if (G.energyLifePrint() > 0) {
-            PS.debug("Good Energy");
             PS.gridPlane(1);
             var color = PS.color(x, y, r, g, b); // set bead color
             PS.alpha( x, y, PS.ALPHA_OPAQUE );
             PS.gridPlane(0);
-            PS.debug(color + " color" + "\n");
             G.colorSet(color);
             G.firstClickSetup(x, y);
         }
@@ -679,7 +641,7 @@ PS.release = function( x, y, data, options ) {
 
     if(PS.color(x, y) === G.getPreset("COLOR_RETICLE")) {
         if (G.energyLifeManip()) {
-            PS.debug("LIFTOFF");
+
             PS.statusColor(PS.COLOR_BLUE);
             PS.statusText("Energy is : " + G.energyLifePrint());
 
