@@ -68,6 +68,7 @@ var G = (function() {
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
     ];
 
+    //Not Used
     var board3 = [
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
         1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
@@ -128,11 +129,16 @@ var G = (function() {
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
     ];
 
-    var level = 0;
+    var level = 0;//Current Level
 
+
+    //All levels
     var levels = [board1, board2, board4, board5];
 
+    //Total score that player earns.
     var energyScore = 0;
+
+
     //Amount of Attempts Player has left.
     var energyLife = 3;
 
@@ -148,9 +154,11 @@ var G = (function() {
     var xglobe = 0;//Current Position of edge of vector
     var yglobe = 0;
 
+    //Coordinates where the bounce begins.
     var xB = 0;
     var yB = 0;
 
+    //Number of spaces the bounce travels from the original bounce point.
     var bounceCount = 0;
 
     // Position where the cursor is lifted up from
@@ -163,12 +171,14 @@ var G = (function() {
     const COLOR_AREA = 0x45FFA8; // Area color
     const COLOR_GOAL = PS.COLOR_YELLOW; // Goal color
     const COLOR_RETICLE = 0xA1A7FF;//Retical color
-    const COLOR_BOUNCE = PS.COLOR_BLUE;
+    const COLOR_BOUNCE = PS.COLOR_BLUE;//bounce bead color.
 
 
+    //Check to see if the first part of the vector has been cleared.
     var firstDone = false;
-    var bounced = false;
 
+    //Check to see if the vector will bounce of a blue bead.
+    var bounced = false;
 
 
     var timer = null; // timer id, null if none
@@ -188,6 +198,10 @@ var G = (function() {
     var exports = {
 
 
+        /* This function activates when the player reaches the goal.
+         * If the player finishes a level that isn't the final level, the board changes to the next level.
+         * If the player was on the last level, than a victory message launches.
+         */
         victory : function () {
 
             PS.statusColor(0x3FF40);
@@ -205,20 +219,29 @@ var G = (function() {
         },
 
 
+        /* This function clears out the beads that were created from the bounce.
+         * direction: the direction the beads were originally traveling before the bounce.
+         * x: original x position of starting bead
+         * y: original y position of starting bead
+         */
         bounceEnd : function (x, y, direction){
 
-            xglobe = xB;
-            yglobe = yB;
+            xglobe = xB;//reset xglobe
+            yglobe = yB;//reset yglobe
 
-            bounced = false;
-            musicTrack = bounceCount;
+            bounced = false;//reset bounced so that bounce can occur again.
+            musicTrack = bounceCount;//reset music track in order to smooth it out.
 
             if (!timer) {
+
+                //Beads from this point will travel in the opposite direction from "direction" i.e., if direction is
+                //East, this function will go West
+
 
                 //East
                 if (direction === "East") {
 
-                    timer = PS.timerStart(30, G.endMove, xglobe, yglobe, -1, 0, direction);
+                    timer = PS.timerStart(30, G.endMove, xglobe, yglobe, 1, 0, direction);
                 }
                 //SouthEast
                 else if (direction === "SouthEast") {
@@ -270,7 +293,7 @@ var G = (function() {
             xglobe += h; // update grabber's x-pos
             yglobe += v; // update grabber's y-pos
 
-
+            //Check the color of the next bead. If not a special bead, move on. If it is special, stop.
 
             if (PS.color(xglobe, yglobe) === COLOR_WALL) {
                 PS.timerStop(timer);
@@ -278,6 +301,7 @@ var G = (function() {
                 firstDone = true;
                 timer = null;
 
+                //If there was a bounce and the first vector has been removed, activate bounceEnd.
                 if (bounced === true && firstDone === true) {
 
                     PS.gridPlane(1);
@@ -290,6 +314,7 @@ var G = (function() {
                 }
 
             }
+
             else if (PS.color(xglobe, yglobe) === COLOR_DEF) {
                 if (musicTrack >= 0 && musicTrack <= 16) {
                     PS.audioPlay(musicOST[musicTrack]);
@@ -311,6 +336,7 @@ var G = (function() {
                 }
 
             }
+
             else if (PS.color(xglobe, yglobe) === COLOR_GOAL) {
                 if (musicTrack >= 0 && musicTrack <= 16) {
                     PS.audioPlay(musicOST[musicTrack]);
@@ -334,6 +360,8 @@ var G = (function() {
                 }
 
             }
+
+
             else if (PS.color(xglobe, yglobe) === COLOR_AREA) {
                 if (musicTrack >= 0 && musicTrack <= 16) {
                     PS.audioPlay(musicOST[musicTrack]);
@@ -342,7 +370,6 @@ var G = (function() {
                 PS.timerStop(timer);
                 firstDone = true;
                 timer = null;
-
 
                 if (bounced === true && firstDone === true) {
 
@@ -357,6 +384,7 @@ var G = (function() {
                 }
 
             }
+
             else if (PS.color(xglobe, yglobe) === COLOR_BOUNCE) {
                 PS.audioPlay(musicOST[musicTrack]);
                 PS.color(xglobe, yglobe, COLOR_BOUNCE);
@@ -454,7 +482,10 @@ var G = (function() {
         },
 
 
-        bounce : function (x, y, direction){
+
+        //This function activates the bounce on colliding with a blue bead.
+
+        bounce : function (direction){
 
             bounced = true;
 
@@ -552,7 +583,7 @@ var G = (function() {
                 timer = null;
                 xglobe -= h;
                 yglobe -= v;
-                G.bounce(x, y, dir);
+                G.bounce(dir);
 
             }
             else {
@@ -571,7 +602,7 @@ var G = (function() {
 
 
 
-        //Function that erases vector. Is put through a timer in "end"
+        //Function that begins the vector. Is put through a timer
         //x: original x position of starting point
         //y: original y position of starting point
         start : function (x, y) {
@@ -639,11 +670,16 @@ var G = (function() {
         },
 
 
-        aimLineGone : function (x, y, h, v) {
+        //Function that erases the red aim line.
+        //x: original x position of the red bead
+        //y: original x position of the red bead
+        //v: verticle change of the red bead line.
+        //h: horizontal change of the red bead line.
+        aimLineGone : function (x, y, v, h) {
 
             if( x < 17 && x > 0 && y < 17 && y > 0 ) {
-                x += h;
-                y += v;
+                x += v;
+                y += h;
 
 
                 PS.alpha(x, y, PS.ALPHA_TRANSPARENT);
@@ -652,22 +688,27 @@ var G = (function() {
 
         },
 
+        //Function that erases the red aim line.
+        //x: original x position of the red bead
+        //y: original x position of the red bead
+
         aimLineDestroy : function (x, y) {
 
-            if( x < 17 && x > 0 &&
-                y < 17 && y > 0 ) {
+            if( x < 17 && x > 0 && y < 17 && y > 0 ) {
+
+                //East
                 if (xglobe < x && yglobe === y) {
                     G.aimLineGone(xglobe + 1, yglobe, 1, 0);
                 }
-                //NorthEast
+                //SouthEast
                 else if (xglobe < x && yglobe < y) {
                     G.aimLineGone(xglobe + 1, yglobe + 1, 1, 1);
                 }
-                //North
+                //South
                 else if (xglobe === x && yglobe < y) {
                     G.aimLineGone(xglobe, yglobe + 1, 0, 1);
                 }
-                //NorthWest
+                //SouthWest
                 else if (xglobe > x && yglobe < y) {
                     G.aimLineGone(xglobe - 1, yglobe + 1, -1, 1);
                 }
@@ -675,15 +716,15 @@ var G = (function() {
                 else if (xglobe > x && yglobe === y) {
                     G.aimLineGone(xglobe - 1, yglobe, -1, 0);
                 }
-                //SouthWest
+                //NorthWest
                 else if (xglobe > x && yglobe > y) {
                     G.aimLineGone(xglobe - 1, yglobe - 1, -1, -1);
                 }
-                //South
+                //North
                 else if (xglobe === x && yglobe > y) {
                     G.aimLineGone(xglobe, yglobe - 1, 0, -1);
                 }
-                //SouthEast
+                //NorthEast
                 else if (xglobe < x && yglobe > y) {
                     G.aimLineGone(xglobe + 1, yglobe - 1, 1, -1);
                 }
@@ -691,10 +732,17 @@ var G = (function() {
 
         },
 
+        //Function that Creates the red aim line.
+        //x: original x position of the red bead
+        //y: original x position of the red bead
+        //v: verticle change of the red bead line.
+        //h: horizontal change of the red bead line.
         aimLine : function (x, y, h, v) {
+
 
             x += h;
             y += v;
+
             PS.color(x, y, PS.COLOR_RED);
             PS.alpha(x, y, PS.ALPHA_OPAQUE);
 
@@ -702,6 +750,10 @@ var G = (function() {
 
         },
 
+
+        //Function that Creates the red aim line.
+        //x: original x position of the red bead
+        //y: original x position of the red bead
 
         aimLineSetup :function (x, y) {
 
@@ -742,7 +794,9 @@ var G = (function() {
         },
 
 
-        //Function that creates the reticle for the player to use.
+        //Function that creates the retical for the player to use.
+        //x: Original x position of the starting point where the player clicked.
+        //y: Original y position of the starting point where the player clicked.
         firstClickSetup : function (x, y) {
 
             xglobe = x;
@@ -788,6 +842,8 @@ var G = (function() {
         },
 
 
+        //Gets color presets.
+        //desiredColor: name of the preset.
         getPreset : function( desiredColor ) {
 
             if (desiredColor === "COLOR_FLOOR") {
@@ -810,6 +866,7 @@ var G = (function() {
             }
 
         },
+
 
         //Reduces energy for each touch.
         energyLifeManip : function () {
@@ -847,6 +904,7 @@ var G = (function() {
         // Initializes the game
 
 
+        //Initializes Game
         init : function () {
             PS.gridSize( WIDTH, HEIGHT ); // init grid
             PS.border( PS.ALL, PS.ALL, 0 ); // no borders
