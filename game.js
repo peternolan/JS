@@ -50,21 +50,21 @@ var G = (function() {
 
     var board2 = [
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,0,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,0,0,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,0,0,2,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,0,0,2,0,1,
-        1,3,3,3,3,3,3,3,3,3,3,0,0,2,0,2,1,
-        1,3,3,3,3,3,3,3,3,3,0,0,2,0,2,4,1,
+        1,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,1,
+        1,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,1,
+        1,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,1,
+        1,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,1,
+        1,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,1,
+        1,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,1,
+        1,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,1,
+        1,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,1,
+        1,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,1,
+        1,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,1,
+        1,3,3,3,3,3,3,3,3,3,3,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,2,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,2,0,2,4,1,
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
     ];
 
@@ -90,19 +90,19 @@ var G = (function() {
 
     var board4 = [
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-        1,0,0,0,2,2,2,0,3,3,3,3,3,3,3,3,1,
-        1,4,0,2,2,2,0,3,3,3,3,3,3,3,3,3,1,
-        1,0,2,2,2,0,3,3,3,3,3,3,3,3,3,3,1,
-        1,2,2,2,0,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,2,2,0,3,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,2,0,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
+        1,0,0,0,2,2,2,0,0,0,0,0,0,0,3,3,1,
+        1,4,0,2,2,2,0,0,0,0,0,0,0,3,3,3,1,
+        1,0,2,2,2,0,0,0,0,0,0,0,3,3,3,3,1,
+        1,2,2,2,0,0,0,0,0,0,0,3,3,3,3,3,1,
+        1,2,2,0,0,0,0,0,0,0,3,3,3,3,3,3,1,
+        1,2,0,0,0,0,0,0,0,3,3,3,3,3,3,3,1,
+        1,0,0,0,0,0,0,0,3,3,3,3,3,3,3,3,1,
+        1,0,0,0,0,0,0,3,3,3,3,3,3,3,3,3,1,
+        1,0,0,0,0,0,3,3,3,3,3,3,3,3,3,3,1,
+        1,0,0,0,0,3,3,3,3,3,3,3,3,3,3,3,1,
+        1,0,0,0,3,3,3,3,3,3,3,3,3,3,3,3,1,
+        1,0,0,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
         1,0,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
-        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
         1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
         1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
@@ -114,9 +114,9 @@ var G = (function() {
         1,3,3,3,0,0,0,2,2,0,0,0,0,0,0,0,1,
         1,3,3,3,0,0,0,2,2,0,0,0,0,0,4,0,1,
         1,3,3,3,0,0,0,2,2,0,0,0,0,0,0,0,1,
+        1,3,3,3,0,1,1,1,1,1,1,0,0,0,0,0,1,
         1,3,3,3,0,0,1,1,1,1,0,0,0,0,0,0,1,
-        1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-        1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,3,3,3,0,0,0,1,1,0,0,0,0,0,0,0,1,
         1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
         1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
         1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,
@@ -130,13 +130,9 @@ var G = (function() {
 
     var level = 0;
 
-    var levels = [board5];
+    var levels = [board1, board2, board4, board5];
 
-    //For Random Board Configuration Choosing
-    //var lastSeed;
-    //lastSeed = 0;
-
-
+    var energyScore = 0;
     //Amount of Attempts Player has left.
     var energyLife = 3;
 
@@ -197,12 +193,12 @@ var G = (function() {
             PS.statusColor(0x3FF40);
             PS.statusText("YOU WIN!!! Next Round!");
             PS.audioPlay("fx_tada");
-            PS.gridPlane(0);
-            if (level < 4) {
+            if (level < 3) {
                 level++;
-                G.init();
+                PS.init();
             }
             else {
+                level = 0;
                 PS.statusText("YOU ARE THE VECTOR LIBERATOR!!!!");
             }
 
@@ -219,11 +215,6 @@ var G = (function() {
 
             if (!timer) {
 
-                PS.debug ("xGlobe " + xglobe + "\n");
-                PS.debug ("yGlobe " + yglobe + "\n");
-                PS.debug ("BOUNCE " + direction + "\n");
-
-                PS.debug ("BOUNCE IF" + direction + "\n");
                 //East
                 if (direction === "East") {
 
@@ -276,13 +267,10 @@ var G = (function() {
         endMove : function (x, y, h, v, dir) {
 
 
-            PS.debug("endMove\n");
-            PS.debug(xglobe + " " + yglobe + "\n");
-
             xglobe += h; // update grabber's x-pos
             yglobe += v; // update grabber's y-pos
 
-            PS.debug("musicTrack " + musicTrack + "\n");
+
 
             if (PS.color(xglobe, yglobe) === COLOR_WALL) {
                 PS.timerStop(timer);
@@ -290,10 +278,8 @@ var G = (function() {
                 firstDone = true;
                 timer = null;
 
-                PS.debug("firstDone " + firstDone + "\n")
                 if (bounced === true && firstDone === true) {
 
-                    PS.debug("ENDBOUNCE\n");
                     PS.gridPlane(1);
                     G.bounceEnd(x, y, dir);
 
@@ -310,10 +296,9 @@ var G = (function() {
                 PS.timerStop(timer);
                 firstDone = true;
                 timer = null;
-                PS.debug("firstDone " + firstDone + "\n")
+
                 if (bounced === true && firstDone === true) {
 
-                    PS.debug("ENDBOUNCE\n");
                     PS.gridPlane(1);
                     G.bounceEnd(x, y, dir);
 
@@ -328,19 +313,18 @@ var G = (function() {
                 PS.audioPlay(musicOST[musicTrack]);
                 PS.color(xglobe, yglobe, COLOR_FLOOR);
                 PS.timerStop(timer);
-                G.victory();
                 firstDone = true;
                 timer = null;
 
-                PS.debug("firstDone " + firstDone + "\n")
+
                 if (bounced === true && firstDone === true) {
 
-                    PS.debug("ENDBOUNCE\n");
                     PS.gridPlane(1);
                     G.bounceEnd(x, y, dir);
 
                 }
                 else {
+                    G.victory();
                     PS.gridPlane(0);
                     firstDone = false;
                 }
@@ -353,10 +337,10 @@ var G = (function() {
                 firstDone = true;
                 timer = null;
 
-                PS.debug("firstDone " + firstDone + "\n")
+
                 if (bounced === true && firstDone === true) {
 
-                    PS.debug("ENDBOUNCE\n");
+
                     PS.gridPlane(1);
                     G.bounceEnd(x, y, dir);
 
@@ -374,10 +358,8 @@ var G = (function() {
                 firstDone = true;
                 timer = null;
 
-                PS.debug("firstDone " + firstDone + "\n")
                 if (bounced === true && firstDone === true) {
 
-                    PS.debug("ENDBOUNCE\n");
                     PS.gridPlane(1);
                     G.bounceEnd(x, y, dir);
 
@@ -390,8 +372,10 @@ var G = (function() {
             }
             else {
 
-                PS.audioPlay(musicOST[musicTrack]);
-                musicTrack--;
+                if (musicTrack >= 0) {
+                    PS.audioPlay(musicOST[musicTrack]);
+                    musicTrack--;
+                }
                 PS.alpha( xglobe, yglobe, PS.ALPHA_TRANSPARENT );
             }
 
@@ -403,7 +387,7 @@ var G = (function() {
         //y: original y position of starting point
         end : function (x, y, dir) {
 
-            PS.debug("NORMAL END \n");
+
 
             xglobe = x;
             yglobe = y;
@@ -413,9 +397,9 @@ var G = (function() {
             PS.alpha( xglobe, yglobe, PS.ALPHA_TRANSPARENT );
 
             if (!timer) {
-                PS.debug("NORMAL END TIMER GOOD \n");
+
                 if (firstDone === false) {
-                    PS.debug("NORMAL END FIRST DONE\n");
+
                     //East
                     if (xglobe < xLift && yglobe === yLift) {
 
@@ -467,12 +451,9 @@ var G = (function() {
 
             bounced = true;
 
-            PS.debug ("xB and yB Set \n");
             xB = xglobe;
             yB = yglobe;
 
-            PS.debug ("BOUNCE " + direction + "\n");
-            PS.debug ("BOUNCE " + xB + " " + yB + "\n");
 
             if (!timer) {
 
@@ -526,9 +507,6 @@ var G = (function() {
             xglobe += h; // update grabber's x-pos
             yglobe += v; // update grabber's y-pos
 
-            PS.debug(xglobe + " " + yglobe + "\n");
-
-            PS.debug("bounced " + bounced + "\n");
 
             if (PS.color(xglobe, yglobe) === COLOR_WALL) {
                 PS.timerStop(timer);
@@ -596,48 +574,48 @@ var G = (function() {
 
             G.firstClickEnd(xglobe, yglobe);
             PS.gridPlane(1);
-            PS.debug("Start Grid Plane 1\n");
+
 
             if (!timer) {
 
                 //West
                 if (xglobe < x && yglobe === y) {
-                    PS.debug( "West \n");
+
                     timer = PS.timerStart(30, G.move, xglobe, yglobe, 1, 0, "West");
                 }
                 //SouthEast
                 else if (xglobe < x && yglobe < y) {
-                    PS.debug("SouthEast\n");
+
                     timer = PS.timerStart(30, G.move, xglobe, yglobe, 1, 1, "SouthEast");
                 }
                 //North
                 else if (xglobe === x && yglobe < y) {
-                    PS.debug("South\n");
+
                     timer = PS.timerStart(30, G.move, xglobe, yglobe, 0, 1, "South");
                 }
                 //SouthWest
                 else if (xglobe > x && yglobe < y) {
-                    PS.debug("SouthWest\n");
+
                     timer = PS.timerStart(30, G.move, xglobe, yglobe, -1, 1, "NorthWest");
                 }
                 //East
                 else if (xglobe > x && yglobe === y) {
-                    PS.debug("East\n");
+
                     timer = PS.timerStart(30, G.move, xglobe, yglobe, -1, 0,"East");
                 }
                 //NorthWest
                 else if (xglobe > x && yglobe > y) {
-                    PS.debug("SouthWest\n");
+
                     timer = PS.timerStart(30, G.move, xglobe, yglobe, -1, -1, "NorthWest");
                 }
                 //North
                 else if (xglobe === x && yglobe > y) {
-                    PS.debug("North \n");
+
                     timer = PS.timerStart(30, G.move, xglobe, yglobe, 0, -1, "North");
                 }
                 //NorthEast
                 else if (xglobe < x && yglobe > y) {
-                    PS.debug("NorthEast\n");
+
                     timer = PS.timerStart(30, G.move, xglobe, yglobe, 1, -1, "NorthEast");
                 }
                 else {
@@ -660,7 +638,7 @@ var G = (function() {
                 x += h;
                 y += v;
 
-                PS.debug("PS.aimLineGone @ " + x + ", " + y + "\n");
+
                 PS.alpha(x, y, PS.ALPHA_TRANSPARENT);
             }
 
@@ -669,54 +647,50 @@ var G = (function() {
 
         aimLineDestroy : function (x, y) {
 
-
-            if (xglobe < x && yglobe === y) {
-                G.aimLineGone(xglobe + 1, yglobe, 1, 0);
-            }
-            //NorthEast
-            else if (xglobe < x && yglobe < y) {
-                G.aimLineGone(xglobe + 1, yglobe + 1, 1, 1);
-            }
-            //North
-            else if (xglobe === x && yglobe < y) {
-                G.aimLineGone(xglobe, yglobe + 1, 0, 1);
-            }
-            //NorthWest
-            else if (xglobe > x && yglobe < y) {
-                G.aimLineGone(xglobe - 1, yglobe + 1, -1, 1);
-            }
-            //West
-            else if (xglobe > x && yglobe === y) {
-                G.aimLineGone(xglobe - 1, yglobe, -1, 0);
-            }
-            //SouthWest
-            else if (xglobe > x && yglobe > y) {
-                G.aimLineGone(xglobe - 1, yglobe - 1, -1, -1);
-            }
-            //South
-            else if (xglobe === x && yglobe > y) {
-                G.aimLineGone(xglobe, yglobe - 1, 0, -1);
-            }
-            //SouthEast
-            else if (xglobe < x && yglobe > y) {
-                G.aimLineGone(xglobe + 1, yglobe - 1, 1, -1);
+            if( x < 17 && x > 0 &&
+                y < 17 && y > 0 ) {
+                if (xglobe < x && yglobe === y) {
+                    G.aimLineGone(xglobe + 1, yglobe, 1, 0);
+                }
+                //NorthEast
+                else if (xglobe < x && yglobe < y) {
+                    G.aimLineGone(xglobe + 1, yglobe + 1, 1, 1);
+                }
+                //North
+                else if (xglobe === x && yglobe < y) {
+                    G.aimLineGone(xglobe, yglobe + 1, 0, 1);
+                }
+                //NorthWest
+                else if (xglobe > x && yglobe < y) {
+                    G.aimLineGone(xglobe - 1, yglobe + 1, -1, 1);
+                }
+                //West
+                else if (xglobe > x && yglobe === y) {
+                    G.aimLineGone(xglobe - 1, yglobe, -1, 0);
+                }
+                //SouthWest
+                else if (xglobe > x && yglobe > y) {
+                    G.aimLineGone(xglobe - 1, yglobe - 1, -1, -1);
+                }
+                //South
+                else if (xglobe === x && yglobe > y) {
+                    G.aimLineGone(xglobe, yglobe - 1, 0, -1);
+                }
+                //SouthEast
+                else if (xglobe < x && yglobe > y) {
+                    G.aimLineGone(xglobe + 1, yglobe - 1, 1, -1);
+                }
             }
 
         },
 
         aimLine : function (x, y, h, v) {
 
+            x += h;
+            y += v;
+            PS.color(x, y, PS.COLOR_RED);
+            PS.alpha(x, y, PS.ALPHA_OPAQUE);
 
-
-            if( x < 17 && x > 0 && y < 17 && y > 0 ) {
-                PS.debug( "PS.aimLine @ " + x + ", " + y + "\n" );
-                PS.debug( "PS.COLOR " + PS.color(x,y)+ "\n" );
-                x += h;
-                y += v;
-
-                PS.color(x, y, PS.COLOR_RED);
-                PS.alpha(x, y, PS.ALPHA_OPAQUE);
-            }
 
 
         },
@@ -724,36 +698,38 @@ var G = (function() {
 
         aimLineSetup :function (x, y) {
 
-            if (xglobe < x && yglobe === y) {
-                G.aimLine(xglobe + 1, yglobe, 1, 0);
-            }
-            //NorthEast
-            else if (xglobe < x && yglobe < y) {
-                G.aimLine(xglobe + 1, yglobe + 1, 1, 1);
-            }
-            //North
-            else if (xglobe === x && yglobe < y) {
-                G.aimLine(xglobe, yglobe + 1, 0, 1);
-            }
-            //NorthWest
-            else if (xglobe > x && yglobe < y) {
-                G.aimLine(xglobe - 1, yglobe + 1, -1, 1);
-            }
-            //West
-            else if (xglobe > x && yglobe === y) {
-                G.aimLine(xglobe - 1, yglobe, -1, 0);
-            }
-            //SouthWest
-            else if (xglobe > x && yglobe > y) {
-                G.aimLine(xglobe - 1, yglobe - 1, -1, -1);
-            }
-            //South
-            else if (xglobe === x && yglobe > y) {
-                G.aimLine(xglobe, yglobe - 1, 0, -1);
-            }
-            //SouthEast
-            else if (xglobe < x && yglobe > y) {
-                G.aimLine(xglobe + 1, yglobe - 1, 1, -1);
+            if( x < 17 && x > 0 && y < 17 && y > 0 ) {
+                if (xglobe < x && yglobe === y) {
+                    G.aimLine(xglobe + 1, yglobe, 1, 0);
+                }
+                //NorthEast
+                else if (xglobe < x && yglobe < y) {
+                    G.aimLine(xglobe + 1, yglobe + 1, 1, 1);
+                }
+                //North
+                else if (xglobe === x && yglobe < y) {
+                    G.aimLine(xglobe, yglobe + 1, 0, 1);
+                }
+                //NorthWest
+                else if (xglobe > x && yglobe < y) {
+                    G.aimLine(xglobe - 1, yglobe + 1, -1, 1);
+                }
+                //West
+                else if (xglobe > x && yglobe === y) {
+                    G.aimLine(xglobe - 1, yglobe, -1, 0);
+                }
+                //SouthWest
+                else if (xglobe > x && yglobe > y) {
+                    G.aimLine(xglobe - 1, yglobe - 1, -1, -1);
+                }
+                //South
+                else if (xglobe === x && yglobe > y) {
+                    G.aimLine(xglobe, yglobe - 1, 0, -1);
+                }
+                //SouthEast
+                else if (xglobe < x && yglobe > y) {
+                    G.aimLine(xglobe + 1, yglobe - 1, 1, -1);
+                }
             }
 
         },
@@ -766,7 +742,7 @@ var G = (function() {
             yglobe = y;
 
             PS.gridPlane(2);
-            PS.debug("first Click Grid Plane 2\n");
+
 
             PS.color( x+1, y, COLOR_RETICLE);
             PS.alpha( x+1, y, PS.ALPHA_OPAQUE );
@@ -832,6 +808,7 @@ var G = (function() {
         energyLifeManip : function () {
             if (energyLife > 0) {
                 energyLife--;
+                energyScore++;
                 return true;
             }
             else return false;
@@ -842,6 +819,12 @@ var G = (function() {
         energyLifePrint : function () {
 
             return energyLife;
+
+        },
+
+        energyScorePrint : function () {
+
+            return energyScore;
 
         },
 
@@ -962,11 +945,11 @@ PS.touch = function( x, y, data, options ) {
 
         if (G.energyLifePrint() > 0) {
             PS.gridPlane(1);
-            PS.debug("Touch Grid Plane 1\n");
+
             var color = PS.color(x, y, r, g, b); // set bead color
             PS.alpha( x, y, PS.ALPHA_OPAQUE );
             PS.gridPlane(0);
-            PS.debug("touch Grid Plane 0\n");
+
             G.colorSet(color);
             G.firstClickSetup(x, y);
         }
@@ -999,8 +982,6 @@ It doesn't have to do anything
 PS.release = function( x, y, data, options ) {
     // Uncomment the following code line to inspect x/y parameters:
 
-     PS.debug( "PS.release() @ " + x + ", " + y + "\n" );
-
     // Add code here for when the mouse button/touch is released over a bead.
 
 
@@ -1010,7 +991,7 @@ PS.release = function( x, y, data, options ) {
         if (G.energyLifeManip()) {
 
             PS.statusColor(PS.COLOR_BLUE);
-            PS.statusText("Energy is : " + G.energyLifePrint());
+            PS.statusText("Energy is : " + G.energyLifePrint() + " Total Score is " + G.energyScorePrint());
 
             // Add code here for mouse clicks/touches over a bead.
 
@@ -1047,8 +1028,12 @@ PS.enter = function( x, y, data, options ) {
 	// Add code here for when the mouse cursor/touch enters a bead.
 
 
-    if(PS.color(x, y) === G.getPreset("COLOR_RETICLE")) {
-        G.aimLineSetup(x, y);
+    if( (x + 1) < 16 && (x - 1) > 0
+        && (y + 1) < 16 && (y - 1) > 0
+        && (y + 1) > 0 && (x + 1) > 0) {
+        if (PS.color(x, y) === G.getPreset("COLOR_RETICLE")) {
+            G.aimLineSetup(x, y);
+        }
     }
 
 
@@ -1073,8 +1058,12 @@ PS.exit = function( x, y, data, options ) {
 	// PS.debug( "PS.exit() @ " + x + ", " + y + "\n" );
 	// Add code here for when the mouse cursor/touch exits a bead.
 
-    if(PS.color(x, y) === G.getPreset("COLOR_RETICLE")) {
-        G.aimLineDestroy(x, y);
+    if( (x + 1) < 16 && (x - 1) > 0
+        && (y + 1) < 16 && (y - 1) > 0
+        && (y + 1) > 0 && (x + 1) > 0) {
+        if (PS.color(x, y) === G.getPreset("COLOR_RETICLE")) {
+            G.aimLineDestroy(x, y);
+        }
     }
 
 
@@ -1116,6 +1105,11 @@ PS.keyDown = function( key, shift, ctrl, options ) {
 	// Uncomment the following code line to inspect first three parameters:
 	// PS.debug( "PS.keyDown(): key=" + key + ", shift=" + shift + ", ctrl=" + ctrl + "\n" );
 	// Add code here for when a key is pressed.
+
+    if (key === PS.KEY_ESCAPE) {
+
+
+    }
 };
 */
 
