@@ -291,7 +291,9 @@ var G = (function() {
 
             }
             else if (PS.color(xglobe, yglobe) === COLOR_DEF) {
-                PS.audioPlay(musicOST[musicTrack]);
+                if (musicTrack >= 0 && musicTrack <= 16) {
+                    PS.audioPlay(musicOST[musicTrack]);
+                }
                 PS.color(xglobe, yglobe, COLOR_FLOOR);
                 PS.timerStop(timer);
                 firstDone = true;
@@ -310,7 +312,9 @@ var G = (function() {
 
             }
             else if (PS.color(xglobe, yglobe) === COLOR_GOAL) {
-                PS.audioPlay(musicOST[musicTrack]);
+                if (musicTrack >= 0 && musicTrack <= 16) {
+                    PS.audioPlay(musicOST[musicTrack]);
+                }
                 PS.color(xglobe, yglobe, COLOR_FLOOR);
                 PS.timerStop(timer);
                 firstDone = true;
@@ -331,7 +335,9 @@ var G = (function() {
 
             }
             else if (PS.color(xglobe, yglobe) === COLOR_AREA) {
-                PS.audioPlay(musicOST[musicTrack]);
+                if (musicTrack >= 0 && musicTrack <= 16) {
+                    PS.audioPlay(musicOST[musicTrack]);
+                }
                 PS.color(xglobe, yglobe, COLOR_AREA);
                 PS.timerStop(timer);
                 firstDone = true;
@@ -372,7 +378,8 @@ var G = (function() {
             }
             else {
 
-                if (musicTrack >= 0) {
+
+                if (musicTrack >= 0 && musicTrack <= 16) {
                     PS.audioPlay(musicOST[musicTrack]);
                     musicTrack--;
                 }
