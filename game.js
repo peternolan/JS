@@ -182,6 +182,7 @@ var G = (function() {
     //Check to see if the vector will bounce of a blue bead.
     var bounced = false;
 
+    var beadCount = 0;
 
     var timer = null; // timer id, null if none
 
@@ -243,41 +244,41 @@ var G = (function() {
                 //East
                 if (direction === "East") {
 
-                    timer = PS.timerStart(30, G.endMove, xglobe, yglobe, 1, 0, direction);
+                    timer = PS.timerStart(15, G.endMove, xglobe, yglobe, 1, 0, direction);
                 }
                 //SouthEast
                 else if (direction === "SouthEast") {
 
-                    timer = PS.timerStart(30, G.endMove, xglobe, yglobe, 1, -1, direction);
+                    timer = PS.timerStart(25, G.endMove, xglobe, yglobe, 1, -1, direction);
                 }
                 //South
                 else if (direction === "South") {
 
-                    timer = PS.timerStart(30, G.endMove, xglobe, yglobe, 0, -1, direction);
+                    timer = PS.timerStart(25, G.endMove, xglobe, yglobe, 0, -1, direction);
                 }
                 //SouthWest
                 else if (direction === "SouthWest") {
 
-                    timer = PS.timerStart(30, G.endMove, xglobe, yglobe, -1, -1, direction);
+                    timer = PS.timerStart(25, G.endMove, xglobe, yglobe, -1, -1, direction);
                 }
                 //West
                 else if (direction === "West") {
-                    timer = PS.timerStart(30, G.endMove, xglobe, yglobe, 1, 0, direction);
+                    timer = PS.timerStart(25, G.endMove, xglobe, yglobe, 1, 0, direction);
                 }
                 //NorthWest
                 else if (direction === "NorthWest") {
 
-                    timer = PS.timerStart(30, G.endMove, xglobe, yglobe, -1, 1, direction);
+                    timer = PS.timerStart(25, G.endMove, xglobe, yglobe, -1, 1, direction);
                 }
                 //North
                 else if (direction === "North") {
 
-                    timer = PS.timerStart(30, G.endMove, xglobe, yglobe, 0, 1, direction);
+                    timer = PS.timerStart(25, G.endMove, xglobe, yglobe, 0, 1, direction);
                 }
                 //NorthEast
                 else if (direction === "NorthEast") {
 
-                    timer = PS.timerStart(30, G.endMove, xglobe, yglobe, -1, 1, direction);
+                    timer = PS.timerStart(25, G.endMove, xglobe, yglobe, -1, 1, direction);
                 }
 
             }
@@ -424,6 +425,7 @@ var G = (function() {
                     PS.debug("End Else Music track " + musicTrack + "\n");
                     PS.audioPlay(musicOST[musicTrack]);
                     musicTrack--;
+                    beadCount--;
 
                 }
                 PS.alpha( xglobe, yglobe, PS.ALPHA_TRANSPARENT );
@@ -465,41 +467,41 @@ var G = (function() {
                     //East
                     if (xglobe < xLift && yglobe === yLift) {
 
-                        timer = PS.timerStart(30, G.endMove, xglobe, yglobe, 1, 0, dir);
+                        timer = PS.timerStart(25, G.endMove, xglobe, yglobe, 1, 0, dir);
                     }
                     //SouthEast
                     else if (xglobe < xLift && yglobe < yLift) {
 
-                        timer = PS.timerStart(30, G.endMove, xglobe, yglobe, 1, 1, dir);
+                        timer = PS.timerStart(25, G.endMove, xglobe, yglobe, 1, 1, dir);
                     }
                     //South
                     else if (xglobe === xLift && yglobe < yLift) {
 
-                        timer = PS.timerStart(30, G.endMove, xglobe, yglobe, 0, 1, dir);
+                        timer = PS.timerStart(25, G.endMove, xglobe, yglobe, 0, 1, dir);
                     }
                     //SouthWest
                     else if (xglobe > xLift && yglobe < yLift) {
 
-                        timer = PS.timerStart(30, G.endMove, xglobe, yglobe, -1, 1, dir);
+                        timer = PS.timerStart(25, G.endMove, xglobe, yglobe, -1, 1, dir);
                     }
                     //West
                     else if (xglobe > xLift && yglobe === yLift) {
-                        timer = PS.timerStart(30, G.endMove, xglobe, yglobe, -1, 0, dir);
+                        timer = PS.timerStart(25, G.endMove, xglobe, yglobe, -1, 0, dir);
                     }
                     //NorthWest
                     else if (xglobe > xLift && yglobe > yLift) {
 
-                        timer = PS.timerStart(30, G.endMove, xglobe, yglobe, -1, -1, dir);
+                        timer = PS.timerStart(25, G.endMove, xglobe, yglobe, -1, -1, dir);
                     }
                     //North
                     else if (xglobe === xLift && yglobe > yLift) {
 
-                        timer = PS.timerStart(30, G.endMove, xglobe, yglobe, 0, -1, dir);
+                        timer = PS.timerStart(25, G.endMove, xglobe, yglobe, 0, -1, dir);
                     }
                     //NorthEast
                     else if (xglobe < xLift && yglobe > yLift) {
 
-                        timer = PS.timerStart(30, G.endMove, xglobe, yglobe, 1, -1, dir);
+                        timer = PS.timerStart(25, G.endMove, xglobe, yglobe, 1, -1, dir);
                     }
 
                 }
@@ -524,35 +526,35 @@ var G = (function() {
 
                 //West
                 if (direction === "West") {
-                    timer = PS.timerStart(30, G.move, xB, yB, -1, 0, "West");
+                    timer = PS.timerStart(25, G.move, xB, yB, -1, 0, "West");
                 }
                 //NorthEast
                 else if (direction === "NorthEast") {
-                    timer = PS.timerStart(30, G.move, xB, yB, 1, -1, "NorthWest");
+                    timer = PS.timerStart(25, G.move, xB, yB, 1, -1, "NorthWest");
                 }
                 //North
                 else if (direction === "North") {
-                    timer = PS.timerStart(30, G.move, xB, yB, 0, -1, "North");
+                    timer = PS.timerStart(25, G.move, xB, yB, 0, -1, "North");
                 }
                 //NorthWest
                 else if (direction === "NorthWest") {
-                    timer = PS.timerStart(30, G.move, xB, yB, 1, -1, "NorthWest");
+                    timer = PS.timerStart(25, G.move, xB, yB, 1, -1, "NorthWest");
                 }
                 //East
                 else if (direction === "East") {
-                    timer = PS.timerStart(30, G.move, xB, yB, 1, 0, "East");
+                    timer = PS.timerStart(25, G.move, xB, yB, 1, 0, "East");
                 }
                 //SouthWest
                 else if (direction === "SouthWest") {
-                    timer = PS.timerStart(30, G.move, xB, yB, 1, 1, "SouthWest");
+                    timer = PS.timerStart(25, G.move, xB, yB, 1, 1, "SouthWest");
                 }
                 //South
                 else if (direction === "South") {
-                    timer = PS.timerStart(30, G.move, xB, yB, 0, 1, "South");
+                    timer = PS.timerStart(25, G.move, xB, yB, 0, 1, "South");
                 }
                 //SouthEast
                 else if (direction === "SouthEast") {
-                    timer = PS.timerStart(30, G.move, xB, yB, 1, -1, "SouthEast");
+                    timer = PS.timerStart(25, G.move, xB, yB, 1, -1, "SouthEast");
                 }
 
                 musicTrackBounce = 0;
@@ -621,7 +623,7 @@ var G = (function() {
                 }
                 PS.color(xglobe, yglobe, colorG);
                 PS.alpha( xglobe, yglobe, PS.ALPHA_OPAQUE );
-
+                beadCount++;
             }
 
         },
@@ -645,42 +647,42 @@ var G = (function() {
                 //West
                 if (xglobe < x && yglobe === y) {
 
-                    timer = PS.timerStart(30, G.move, xglobe, yglobe, 1, 0, "West");
+                    timer = PS.timerStart(25, G.move, xglobe, yglobe, 1, 0, "West");
                 }
                 //SouthEast
                 else if (xglobe < x && yglobe < y) {
 
-                    timer = PS.timerStart(30, G.move, xglobe, yglobe, 1, 1, "SouthEast");
+                    timer = PS.timerStart(25, G.move, xglobe, yglobe, 1, 1, "SouthEast");
                 }
                 //North
                 else if (xglobe === x && yglobe < y) {
 
-                    timer = PS.timerStart(30, G.move, xglobe, yglobe, 0, 1, "South");
+                    timer = PS.timerStart(25, G.move, xglobe, yglobe, 0, 1, "South");
                 }
                 //SouthWest
                 else if (xglobe > x && yglobe < y) {
 
-                    timer = PS.timerStart(30, G.move, xglobe, yglobe, -1, 1, "NorthWest");
+                    timer = PS.timerStart(25, G.move, xglobe, yglobe, -1, 1, "NorthWest");
                 }
                 //East
                 else if (xglobe > x && yglobe === y) {
 
-                    timer = PS.timerStart(30, G.move, xglobe, yglobe, -1, 0,"East");
+                    timer = PS.timerStart(25, G.move, xglobe, yglobe, -1, 0,"East");
                 }
                 //NorthWest
                 else if (xglobe > x && yglobe > y) {
 
-                    timer = PS.timerStart(30, G.move, xglobe, yglobe, -1, -1, "NorthWest");
+                    timer = PS.timerStart(25, G.move, xglobe, yglobe, -1, -1, "NorthWest");
                 }
                 //North
                 else if (xglobe === x && yglobe > y) {
 
-                    timer = PS.timerStart(30, G.move, xglobe, yglobe, 0, -1, "North");
+                    timer = PS.timerStart(25, G.move, xglobe, yglobe, 0, -1, "North");
                 }
                 //NorthEast
                 else if (xglobe < x && yglobe > y) {
 
-                    timer = PS.timerStart(30, G.move, xglobe, yglobe, 1, -1, "NorthEast");
+                    timer = PS.timerStart(25, G.move, xglobe, yglobe, 1, -1, "NorthEast");
                 }
                 else {
                     energyLife++;
@@ -765,11 +767,11 @@ var G = (function() {
         //h: horizontal change of the red bead line.
         aimLine : function (x, y, h, v) {
 
-
             x += h;
             y += v;
 
             PS.color(x, y, PS.COLOR_RED);
+
             PS.alpha(x, y, PS.ALPHA_OPAQUE);
 
 
@@ -935,6 +937,17 @@ var G = (function() {
 
         },
 
+        getStartingPoint : function (returnee) {
+
+            if (returnee === "x"){
+                return xStart;
+            }
+            else if (returnee === "y"){
+                return yStart;
+            }
+
+        },
+
 
 
         // G.init()
@@ -1047,13 +1060,14 @@ PS.touch = function( x, y, data, options ) {
 
     PS.debug("x " + x + " y " + y + " \n");
 
+    G.setStartingPoint(x, y);
 
     if(PS.color(x, y) === G.getPreset("COLOR_AREA")) {
 
         if (G.energyLifePrint() > 0) {
             PS.gridPlane(1);
 
-            G.setStartingPoint(x, y);
+
 
             var color = PS.color(x, y, r, g, b); // set bead color
             PS.alpha( x, y, PS.ALPHA_OPAQUE );
@@ -1093,23 +1107,24 @@ PS.release = function( x, y, data, options ) {
 
     // Add code here for when the mouse button/touch is released over a bead.
 
+    if (x !== G.getStartingPoint(x) && y !== G.getStartingPoint(y)) {
+        if (PS.color(x, y) === G.getPreset("COLOR_RETICLE")) {
+            if (G.energyLifeManip()) {
 
-    if(PS.color(x, y) === G.getPreset("COLOR_RETICLE")) {
-        if (G.energyLifeManip()) {
+                PS.statusColor(PS.COLOR_BLUE);
+                PS.statusText("Chances: " + G.energyLifePrint() + " Total Score is " + G.energyScorePrint());
 
-            PS.statusColor(PS.COLOR_BLUE);
-            PS.statusText("Chances: " + G.energyLifePrint() + " Total Score is " + G.energyScorePrint());
+                // Add code here for mouse clicks/touches over a bead.
 
-            // Add code here for mouse clicks/touches over a bead.
+                G.start(x, y);
 
-            G.start(x, y);
 
+            }
+            PS.gridPlane(2);
+            G.aimLineDestroy(x, y);
+            PS.gridPlane(1);
 
         }
-        PS.gridPlane(2);
-        G.aimLineDestroy(x, y);
-        PS.gridPlane(1);
-
     }
 
 };
