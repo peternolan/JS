@@ -133,7 +133,7 @@ var G = (function() {
 
 
     //All levels
-    var levels = [board1, board2, board4, board5];
+    var levels = [board1, board2 , board4, board5];
 
     //Total score that player earns.
     var energyScore = 0;
@@ -149,6 +149,7 @@ var G = (function() {
     var colorG = 0;//Color of Vector on creation.
 
     var musicTrack = 0;//Current note being played on vector creation.
+    var musicTrackBounce = 0;
     var origMusic = 0;
 
     var xglobe = 0;//Current Position of edge of vector
@@ -158,8 +159,9 @@ var G = (function() {
     var xB = 0;
     var yB = 0;
 
-    //Number of spaces the bounce travels from the original bounce point.
-    var bounceCount = 0;
+    //Starting coordinates of vector
+    var xStart = 0;
+    var yStart = 0;
 
     // Position where the cursor is lifted up from
     var xLift = 0;
@@ -230,7 +232,7 @@ var G = (function() {
             yglobe = yB;//reset yglobe
 
             bounced = false;//reset bounced so that bounce can occur again.
-            musicTrack = bounceCount;//reset music track in order to smooth it out.
+
 
             if (!timer) {
 
@@ -292,8 +294,10 @@ var G = (function() {
 
             xglobe += h; // update grabber's x-pos
             yglobe += v; // update grabber's y-pos
-
             //Check the color of the next bead. If not a special bead, move on. If it is special, stop.
+
+            PS.debug("firstDone " + firstDone + " \n");
+            PS.debug("bounced " + bounced + " \n");
 
             if (PS.color(xglobe, yglobe) === COLOR_WALL) {
                 PS.timerStop(timer);
@@ -303,12 +307,13 @@ var G = (function() {
 
                 //If there was a bounce and the first vector has been removed, activate bounceEnd.
                 if (bounced === true && firstDone === true) {
-
+                    PS.audioPlay(musicOST[musicTrackBounce]);
                     PS.gridPlane(1);
                     G.bounceEnd(x, y, dir);
 
                 }
                 else {
+                    PS.audioPlay(musicOST[musicTrack]);
                     PS.gridPlane(0);
                     firstDone = false;
                 }
@@ -316,21 +321,20 @@ var G = (function() {
             }
 
             else if (PS.color(xglobe, yglobe) === COLOR_DEF) {
-                if (musicTrack >= 0 && musicTrack <= 16) {
-                    PS.audioPlay(musicOST[musicTrack]);
-                }
+
                 PS.color(xglobe, yglobe, COLOR_FLOOR);
                 PS.timerStop(timer);
                 firstDone = true;
                 timer = null;
 
                 if (bounced === true && firstDone === true) {
-
+                    PS.audioPlay("fx_blast4");
                     PS.gridPlane(1);
                     G.bounceEnd(x, y, dir);
 
                 }
                 else {
+                    PS.audioPlay("fx_blast4");
                     PS.gridPlane(0);
                     firstDone = false;
                 }
@@ -338,9 +342,9 @@ var G = (function() {
             }
 
             else if (PS.color(xglobe, yglobe) === COLOR_GOAL) {
-                if (musicTrack >= 0 && musicTrack <= 16) {
-                    PS.audioPlay(musicOST[musicTrack]);
-                }
+
+
+                PS.audioPlay(musicOST[musicTrack]);
                 PS.color(xglobe, yglobe, COLOR_FLOOR);
                 PS.timerStop(timer);
                 firstDone = true;
@@ -349,11 +353,13 @@ var G = (function() {
 
                 if (bounced === true && firstDone === true) {
 
+                    PS.audioPlay(musicOST[musicTrackBounce]);
                     PS.gridPlane(1);
                     G.bounceEnd(x, y, dir);
 
                 }
                 else {
+                    PS.audioPlay(musicOST[musicTrackBounce]);
                     G.victory();
                     PS.gridPlane(0);
                     firstDone = false;
@@ -363,22 +369,21 @@ var G = (function() {
 
 
             else if (PS.color(xglobe, yglobe) === COLOR_AREA) {
-                if (musicTrack >= 0 && musicTrack <= 16) {
-                    PS.audioPlay(musicOST[musicTrack]);
-                }
+
+                PS.audioPlay(musicOST[musicTrack]);
                 PS.color(xglobe, yglobe, COLOR_AREA);
                 PS.timerStop(timer);
                 firstDone = true;
                 timer = null;
 
                 if (bounced === true && firstDone === true) {
-
-
+                    PS.audioPlay(musicOST[musicTrackBounce]);
                     PS.gridPlane(1);
                     G.bounceEnd(x, y, dir);
 
                 }
                 else {
+                    PS.audioPlay(musicOST[musicTrack]);
                     PS.gridPlane(0);
                     firstDone = false;
                 }
@@ -386,19 +391,20 @@ var G = (function() {
             }
 
             else if (PS.color(xglobe, yglobe) === COLOR_BOUNCE) {
-                PS.audioPlay(musicOST[musicTrack]);
+
                 PS.color(xglobe, yglobe, COLOR_BOUNCE);
                 PS.timerStop(timer);
                 firstDone = true;
                 timer = null;
 
                 if (bounced === true && firstDone === true) {
-
+                    PS.audioPlay(musicOST[musicTrackBounce]);
                     PS.gridPlane(1);
                     G.bounceEnd(x, y, dir);
 
                 }
                 else {
+                    PS.audioPlay(musicOST[musicTrack]);
                     PS.gridPlane(0);
                     firstDone = false;
                 }
@@ -406,10 +412,19 @@ var G = (function() {
             }
             else {
 
+                if (bounced === false && firstDone === true) {
 
-                if (musicTrack >= 0 && musicTrack <= 16) {
+                    PS.debug("End Music track Bounce " + musicTrackBounce + "\n");
+                    PS.audioPlay(musicOST[musicTrackBounce]);
+                    musicTrackBounce--;
+
+                }
+                else {
+
+                    PS.debug("End Else Music track " + musicTrack + "\n");
                     PS.audioPlay(musicOST[musicTrack]);
                     musicTrack--;
+
                 }
                 PS.alpha( xglobe, yglobe, PS.ALPHA_TRANSPARENT );
             }
@@ -423,9 +438,20 @@ var G = (function() {
         end : function (x, y, dir) {
 
 
+            PS.debug (firstDone + " \n");
 
-            xglobe = x;
-            yglobe = y;
+
+            if (firstDone === false) {
+                xglobe = xStart;
+                yglobe = yStart;
+            }
+            else {
+                xglobe = x;
+                yglobe = y;
+            }
+
+
+            PS.debug("xglobe " + xglobe + " yglobe " + yglobe + " \n");
 
             PS.audioPlay(musicOST[musicTrack]);
             musicTrack--;
@@ -434,6 +460,7 @@ var G = (function() {
             if (!timer) {
 
                 if (firstDone === false) {
+
 
                     //East
                     if (xglobe < xLift && yglobe === yLift) {
@@ -457,7 +484,7 @@ var G = (function() {
                     }
                     //West
                     else if (xglobe > xLift && yglobe === yLift) {
-                        timer = PS.timerStart(30, G.endMove, xglobe, yglobe, 1, 0, dir);
+                        timer = PS.timerStart(30, G.endMove, xglobe, yglobe, -1, 0, dir);
                     }
                     //NorthWest
                     else if (xglobe > xLift && yglobe > yLift) {
@@ -528,7 +555,7 @@ var G = (function() {
                     timer = PS.timerStart(30, G.move, xB, yB, 1, -1, "SouthEast");
                 }
 
-                musicTrack = 0;
+                musicTrackBounce = 0;
                 musicTrack++;
 
             }
@@ -549,20 +576,18 @@ var G = (function() {
             if (PS.color(xglobe, yglobe) === COLOR_WALL) {
                 PS.timerStop(timer);
 
+                PS.audioPlay("fx_bucket");
+
                 timer = null;
-                if (bounced === true) {
-                    bounceCount++;
-                }
                 G.end(x, y, dir);
 
             }
             else if (PS.color(xglobe, yglobe) === COLOR_DEF) {
                 PS.timerStop(timer);
 
+                PS.audioPlay("fx_shoot7");
+
                 timer = null;
-                if (bounced === true) {
-                    bounceCount++;
-                }
                 G.end(x, y, dir);
 
             }
@@ -570,15 +595,13 @@ var G = (function() {
                 PS.timerStop(timer);
 
                 timer = null;
-                if (bounced === true) {
-                    bounceCount++;
-                }
                 G.end(x, y, dir);
 
 
             }
             else if (PS.color(xglobe, yglobe) === COLOR_BOUNCE) {
                 PS.timerStop(timer);
+                PS.audioPlay("fx_jump3");
                 origMusic = musicTrack;
                 timer = null;
                 xglobe -= h;
@@ -588,10 +611,13 @@ var G = (function() {
             }
             else {
 
-                PS.audioPlay(musicOST[musicTrack]);
-                musicTrack++;
                 if (bounced === true) {
-                    bounceCount++;
+                    PS.audioPlay(musicOST[musicTrackBounce]);
+                    musicTrackBounce++;
+                }
+                else {
+                    PS.audioPlay(musicOST[musicTrack]);
+                    musicTrack++;
                 }
                 PS.color(xglobe, yglobe, colorG);
                 PS.alpha( xglobe, yglobe, PS.ALPHA_OPAQUE );
@@ -900,16 +926,27 @@ var G = (function() {
 
         },
 
+
+        setStartingPoint : function (x, y) {
+
+            xStart = x;
+            yStart = y;
+
+
+        },
+
+
+
         // G.init()
         // Initializes the game
-
-
         //Initializes Game
         init : function () {
             PS.gridSize( WIDTH, HEIGHT ); // init grid
-            PS.border( PS.ALL, PS.ALL, 0 ); // no borders
+            PS.border( PS.ALL, PS.ALL, 1 ); // no borders
 
-            energyLife = 3;
+            energyLife = 5;
+
+            PS.borderColor(PS.ALL, PS.ALL, PS.COLOR_BLACK);
 
 
             var selectedBoard = levels[level];
@@ -965,8 +1002,11 @@ var G = (function() {
             PS.audioLoad( "xylo_db6" ); //14
             PS.audioLoad( "xylo_d6" ); //15
             PS.audioLoad( "xylo_eb6" ); //16
+            PS.audioLoad( "fx_shoot7" );
+            PS.audioLoad( "fx_bucket" );
+            PS.audioLoad( "fx_jump3" );
             PS.audioLoad( "fx_squawk" ); //Duck Squak on failure
-            PS.audioLoad( "fx_tada" );//WIN!!!
+            PS.audioLoad( "fx_tada" ); //WIN!!!
 
 
         }
@@ -1005,11 +1045,15 @@ PS.touch = function( x, y, data, options ) {
     g = PS.random(256) - 1; // random green
     b = PS.random(256) - 1; // random blue
 
+    PS.debug("x " + x + " y " + y + " \n");
+
 
     if(PS.color(x, y) === G.getPreset("COLOR_AREA")) {
 
         if (G.energyLifePrint() > 0) {
             PS.gridPlane(1);
+
+            G.setStartingPoint(x, y);
 
             var color = PS.color(x, y, r, g, b); // set bead color
             PS.alpha( x, y, PS.ALPHA_OPAQUE );
@@ -1020,7 +1064,7 @@ PS.touch = function( x, y, data, options ) {
         }
         else {
             PS.statusColor(PS.COLOR_RED);
-            PS.statusText("OUT OF ENERGY");
+            PS.statusText("OUT OF CHANCES");
             PS.audioPlay("fx_squawk");
         }
 
@@ -1050,13 +1094,11 @@ PS.release = function( x, y, data, options ) {
     // Add code here for when the mouse button/touch is released over a bead.
 
 
-
-
     if(PS.color(x, y) === G.getPreset("COLOR_RETICLE")) {
         if (G.energyLifeManip()) {
 
             PS.statusColor(PS.COLOR_BLUE);
-            PS.statusText("Energy is : " + G.energyLifePrint() + " Total Score is " + G.energyScorePrint());
+            PS.statusText("Chances: " + G.energyLifePrint() + " Total Score is " + G.energyScorePrint());
 
             // Add code here for mouse clicks/touches over a bead.
 
