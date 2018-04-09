@@ -131,6 +131,7 @@ var G = (function() {
 
     var level = 0;//Current Level
 
+    var started = false;
 
     //All levels
     var levels = [board1, board2 , board4, board5];
@@ -311,12 +312,14 @@ var G = (function() {
                     PS.audioPlay(musicOST[musicTrackBounce]);
                     PS.gridPlane(1);
                     G.bounceEnd(x, y, dir);
+                    started = false;
 
                 }
                 else {
                     PS.audioPlay(musicOST[musicTrack]);
                     PS.gridPlane(0);
                     firstDone = false;
+                    started = false;
                 }
 
             }
@@ -332,12 +335,14 @@ var G = (function() {
                     PS.audioPlay("fx_blast4");
                     PS.gridPlane(1);
                     G.bounceEnd(x, y, dir);
+                    started = false;
 
                 }
                 else {
                     PS.audioPlay("fx_blast4");
                     PS.gridPlane(0);
                     firstDone = false;
+                    started = false;
                 }
 
             }
@@ -357,6 +362,7 @@ var G = (function() {
                     PS.audioPlay(musicOST[musicTrackBounce]);
                     PS.gridPlane(1);
                     G.bounceEnd(x, y, dir);
+                    started = false;
 
                 }
                 else {
@@ -364,6 +370,7 @@ var G = (function() {
                     G.victory();
                     PS.gridPlane(0);
                     firstDone = false;
+                    started = false;
                 }
 
             }
@@ -381,12 +388,14 @@ var G = (function() {
                     PS.audioPlay(musicOST[musicTrackBounce]);
                     PS.gridPlane(1);
                     G.bounceEnd(x, y, dir);
+                    started = false;
 
                 }
                 else {
                     PS.audioPlay(musicOST[musicTrack]);
                     PS.gridPlane(0);
                     firstDone = false;
+                    started = false;
                 }
 
             }
@@ -415,14 +424,12 @@ var G = (function() {
 
                 if (bounced === false && firstDone === true) {
 
-                    PS.debug("End Music track Bounce " + musicTrackBounce + "\n");
                     PS.audioPlay(musicOST[musicTrackBounce]);
                     musicTrackBounce--;
 
                 }
                 else {
 
-                    PS.debug("End Else Music track " + musicTrack + "\n");
                     PS.audioPlay(musicOST[musicTrack]);
                     musicTrack--;
                     beadCount--;
@@ -440,9 +447,6 @@ var G = (function() {
         end : function (x, y, dir) {
 
 
-            PS.debug (firstDone + " \n");
-
-
             if (firstDone === false) {
                 xglobe = xStart;
                 yglobe = yStart;
@@ -451,9 +455,6 @@ var G = (function() {
                 xglobe = x;
                 yglobe = y;
             }
-
-
-            PS.debug("xglobe " + xglobe + " yglobe " + yglobe + " \n");
 
             PS.audioPlay(musicOST[musicTrack]);
             musicTrack--;
@@ -641,6 +642,7 @@ var G = (function() {
             G.firstClickEnd(xglobe, yglobe);
             PS.gridPlane(1);
 
+            started = true;
 
             if (!timer) {
 
@@ -937,14 +939,9 @@ var G = (function() {
 
         },
 
-        getStartingPoint : function (returnee) {
+        getStarted : function () {
 
-            if (returnee === "x"){
-                return xStart;
-            }
-            else if (returnee === "y"){
-                return yStart;
-            }
+            return started;
 
         },
 
@@ -1058,30 +1055,29 @@ PS.touch = function( x, y, data, options ) {
     g = PS.random(256) - 1; // random green
     b = PS.random(256) - 1; // random blue
 
-    PS.debug("x " + x + " y " + y + " \n");
 
-    G.setStartingPoint(x, y);
+    if (G.getStarted() === false) {
+        if (PS.color(x, y) === G.getPreset("COLOR_AREA")) {
 
-    if(PS.color(x, y) === G.getPreset("COLOR_AREA")) {
+            if (G.energyLifePrint() > 0) {
+                PS.gridPlane(1);
 
-        if (G.energyLifePrint() > 0) {
-            PS.gridPlane(1);
+                G.setStartingPoint(x, y);
 
+                var color = PS.color(x, y, r, g, b); // set bead color
+                PS.alpha(x, y, PS.ALPHA_OPAQUE);
+                PS.gridPlane(0);
 
+                G.colorSet(color);
+                G.firstClickSetup(x, y);
+            }
+            else {
+                PS.statusColor(PS.COLOR_RED);
+                PS.statusText("OUT OF CHANCES");
+                PS.audioPlay("fx_squawk");
+            }
 
-            var color = PS.color(x, y, r, g, b); // set bead color
-            PS.alpha( x, y, PS.ALPHA_OPAQUE );
-            PS.gridPlane(0);
-
-            G.colorSet(color);
-            G.firstClickSetup(x, y);
         }
-        else {
-            PS.statusColor(PS.COLOR_RED);
-            PS.statusText("OUT OF CHANCES");
-            PS.audioPlay("fx_squawk");
-        }
-
     }
 
 };
@@ -1107,7 +1103,6 @@ PS.release = function( x, y, data, options ) {
 
     // Add code here for when the mouse button/touch is released over a bead.
 
-    if (x !== G.getStartingPoint(x) && y !== G.getStartingPoint(y)) {
         if (PS.color(x, y) === G.getPreset("COLOR_RETICLE")) {
             if (G.energyLifeManip()) {
 
@@ -1125,7 +1120,7 @@ PS.release = function( x, y, data, options ) {
             PS.gridPlane(1);
 
         }
-    }
+
 
 };
 
