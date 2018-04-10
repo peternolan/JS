@@ -326,14 +326,12 @@ var G = (function() {
 
                 //If there was a bounce and the first vector has been removed, activate bounceEnd.
                 if (bounced === true && firstDone === true) {
-                    PS.audioPlay(musicOST[musicTrackBounce]);
                     PS.gridPlane(1);
                     G.bounceEnd(x, y, dir);
                     started = false;
 
                 }
                 else {
-                    PS.audioPlay(musicOST[musicTrack]);
                     PS.gridPlane(0);
                     firstDone = false;
                     started = false;
@@ -366,8 +364,6 @@ var G = (function() {
 
             else if (PS.color(xglobe, yglobe) === COLOR_GOAL) {
 
-
-                PS.audioPlay(musicOST[musicTrack]);
                 PS.color(xglobe, yglobe, COLOR_FLOOR);
                 PS.timerStop(timer);
                 firstDone = true;
@@ -376,14 +372,12 @@ var G = (function() {
 
                 if (bounced === true && firstDone === true) {
 
-                    PS.audioPlay(musicOST[musicTrackBounce]);
                     PS.gridPlane(1);
                     G.bounceEnd(x, y, dir);
                     started = false;
 
                 }
                 else {
-                    PS.audioPlay(musicOST[musicTrackBounce]);
                     G.victory();
                     PS.gridPlane(0);
                     firstDone = false;
