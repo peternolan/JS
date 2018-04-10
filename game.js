@@ -129,12 +129,32 @@ var G = (function() {
         1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
     ];
 
+    var board6 = [
+        1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,1,
+        1,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,
+        1,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,
+        1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,
+        1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,
+        1,0,0,0,0,5,0,0,0,0,0,0,1,1,1,1,1,
+        1,3,0,0,0,5,0,0,0,0,3,3,3,3,3,1,1,
+        1,3,0,0,0,5,2,2,0,0,3,3,3,3,3,3,1,
+        1,3,0,0,0,0,0,0,0,0,3,3,3,3,3,3,1,
+        1,0,0,0,0,0,0,0,0,0,3,3,3,3,3,3,1,
+        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
+        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
+        1,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,
+        1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+    ]
+
     var level = 0;//Current Level
 
     var started = false;
 
     //All levels
-    var levels = [board1, board2 , board4, board5];
+    var levels = [board1, board2 , board4, board5, board6];
 
     //Total score that player earns.
     var energyScore = 0;
@@ -211,7 +231,7 @@ var G = (function() {
             PS.statusColor(0x3FF40);
             PS.statusText("YOU WIN!!! Next Round!");
             PS.audioPlay("fx_tada");
-            if (level < 3) {
+            if (level < 4) {
                 level++;
                 PS.init();
             }
@@ -269,7 +289,7 @@ var G = (function() {
                 //NorthWest
                 else if (direction === "NorthWest") {
 
-                    timer = PS.timerStart(25, G.endMove, xglobe, yglobe, -1, 1, direction);
+                    timer = PS.timerStart(25, G.endMove, xglobe, yglobe, 1, -1, direction);
                 }
                 //North
                 else if (direction === "North") {
@@ -297,9 +317,6 @@ var G = (function() {
             xglobe += h; // update grabber's x-pos
             yglobe += v; // update grabber's y-pos
             //Check the color of the next bead. If not a special bead, move on. If it is special, stop.
-
-            PS.debug("firstDone " + firstDone + " \n");
-            PS.debug("bounced " + bounced + " \n");
 
             if (PS.color(xglobe, yglobe) === COLOR_WALL) {
                 PS.timerStop(timer);
